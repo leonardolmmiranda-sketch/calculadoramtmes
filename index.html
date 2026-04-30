@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis MTM — Mercado Libre</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --yellow:#FFE600;--yellow-dark:#E6CF00;
+  --blue:#3483FA;--blue-dark:#2968C8;--blue-deeper:#1A4F9E;
+  --blue-light:#EBF3FF;--blue-mid:#D4E8FF;
+  --dark:#1A1A2E;--text:#333;--gray:#717171;
+  --gray-light:#F5F5F5;--border:#EBEBEB;--white:#fff;
+  --green:#00A650;--green-light:#E8F8EF;
+  --orange:#FF7733;--orange-light:#FFF0E8;
+  --red:#E53935;--red-light:#FFEBEE;
+}
+body{font-family:'Inter',sans-serif;background:#F2F2F2;color:var(--text);min-height:100vh}
+
+/* HEADER */
+header{background:var(--yellow);height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--yellow-dark)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:36px;height:36px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:20px;height:20px}
+.logo-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:17px;color:var(--blue-deeper)}
+.logo-sub{font-size:10px;font-weight:600;color:var(--blue-dark);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+
+.btn-voltar,.lang-link{font-size:12px;font-weight:600;color:var(--blue-deeper);text-decoration:none;background:rgba(255,255,255,0.7);padding:4px 12px;border-radius:20px;border:1px solid var(--yellow-dark);transition:background .15s}
+.btn-voltar:hover,.lang-link:hover{background:white}
+.header-right{display:flex;align-items:center;gap:8px}
+.badge{background:var(--blue);color:var(--yellow);font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px}
+
+/* HERO */
+.hero{background:var(--yellow);padding:2.5rem 2rem 2rem;text-align:center;border-bottom:2px solid var(--yellow-dark)}
+.hero-tag{display:inline-block;background:var(--blue);color:var(--yellow);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.hero-title-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.hero-ml-icon{width:46px;height:46px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hero-ml-icon svg{width:26px;height:26px}
+.hero h1{font-family:'Raleway',sans-serif;font-size:clamp(22px,3.5vw,36px);font-weight:800;color:var(--blue-deeper);letter-spacing:-0.8px;line-height:1.2}
+.hero p{font-size:14px;color:var(--blue-dark);opacity:.8;max-width:580px;margin:8px auto 0;line-height:1.6}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.layout{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+
+/* CARDS */
+.card{background:var(--white);border-radius:12px;border:1px solid var(--border)}
+.card+.card{margin-top:16px}
+.card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-icon{width:32px;height:32px;background:#FFFBE6;border:1px solid var(--yellow-dark);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.card-header h2{font-family:'Raleway',sans-serif;font-size:14px;font-weight:700;color:var(--dark)}
+.card-header p{font-size:11px;color:var(--gray);margin-top:1px}
+.card-body{padding:1.25rem}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.divider{border:none;border-top:1px solid var(--border);margin:.9rem 0}
+
+label{display:block;font-size:12px;font-weight:500;color:var(--text);margin-bottom:5px}
+label .hint{font-weight:400;color:var(--gray)}
+.field{margin-bottom:.9rem}
+.field:last-child{margin-bottom:0}
+input[type="text"],input[type="password"],textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:0 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--white);outline:none;transition:border-color .15s}
+input[type="text"],input[type="password"]{height:40px}
+textarea{padding:10px 12px;resize:vertical;min-height:80px;line-height:1.5}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(52,131,250,.1)}
+.field-comment{font-size:11px;color:var(--gray);line-height:1.5;margin-top:4px;background:var(--gray-light);border-radius:6px;padding:5px 8px;border-left:3px solid var(--blue-mid)}
+.field-comment.warn{background:var(--orange-light);border-left-color:var(--orange);color:#7A3800}
+.field-comment.ok{background:var(--green-light);border-left-color:var(--green);color:#005A28}
+
+/* API KEY AREA */
+.api-row{display:flex;gap:8px;align-items:center}
+.api-row input{flex:1}
+.btn-sm{height:38px;padding:0 14px;background:var(--blue);color:white;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s}
+.btn-sm:hover{background:var(--blue-dark)}
+.btn-sm.secondary{background:var(--gray-light);color:var(--text);border:1px solid var(--border)}
+.btn-sm.secondary:hover{background:var(--border)}
+
+/* DROP ZONE */
+.drop-zone{border:2px dashed var(--border);border-radius:12px;padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--gray-light);position:relative}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--blue);background:var(--blue-light)}
+.drop-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{font-size:36px;margin-bottom:10px}
+.drop-title{font-family:'Raleway',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.drop-sub{font-size:12px;color:var(--gray)}
+.drop-preview{margin-top:12px}
+.drop-preview video{max-width:100%;max-height:200px;border-radius:8px;border:1px solid var(--border)}
+.drop-filename{font-size:12px;color:var(--blue);font-weight:500;margin-top:6px}
+
+/* PROCESSO TYPE BUTTONS */
+.proc-types{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
+.proc-btn{padding:8px 6px;border:1.5px solid var(--border);border-radius:8px;background:var(--white);cursor:pointer;text-align:center;font-size:11px;font-weight:600;color:var(--gray);transition:all .15s;font-family:'Inter',sans-serif}
+.proc-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.proc-btn.active{border-color:var(--blue);background:var(--blue);color:white}
+.proc-btn .proc-icon{font-size:18px;display:block;margin-bottom:3px}
+
+/* ANALYZE BTN */
+.btn-analyze{width:100%;height:52px;background:var(--blue);color:white;border:none;border-radius:10px;font-family:'Raleway',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s,transform .1s;margin-top:1.25rem;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-analyze:hover{background:var(--blue-dark)}
+.btn-analyze:active{transform:scale(0.99)}
+.btn-analyze:disabled{background:var(--border);color:var(--gray);cursor:not-allowed}
+
+/* RESULTS */
+.results-sticky{position:sticky;top:76px}
+.result-header{background:var(--blue);padding:1.25rem 1.5rem;border-radius:12px 12px 0 0}
+.r-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:4px}
+.r-title{font-family:'Raleway',sans-serif;font-size:15px;font-weight:700;color:var(--yellow)}
+
+/* LOADING */
+.loading-area{padding:3rem 1.5rem;text-align:center}
+.spinner{width:40px;height:40px;border:3px solid var(--blue-light);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--gray);line-height:1.6}
+.loading-step{font-size:12px;color:var(--blue);font-weight:500;margin-top:8px}
+
+/* EMPTY STATE */
+.empty-state{padding:3rem 1.5rem;text-align:center;color:var(--gray)}
+.empty-icon{font-size:36px;margin-bottom:12px}
+.empty-state p{font-size:13px;line-height:1.6}
+
+/* RESULT TABLE */
+.result-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:.9rem 1.25rem;border-bottom:1px solid var(--border)}
+.res-card{background:var(--gray-light);border-radius:8px;padding:9px 10px;text-align:center}
+.res-card.hl{background:var(--blue)}
+.res-val{font-family:'Raleway',sans-serif;font-size:22px;font-weight:800;color:var(--blue);line-height:1}
+.res-card.hl .res-val{color:var(--yellow)}
+.res-lbl{font-size:9px;color:var(--gray);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.res-card.hl .res-lbl{color:rgba(255,255,255,.65)}
+
+.result-table-wrap{padding:.9rem 1.25rem;overflow-x:auto}
+.mtm-table{width:100%;border-collapse:collapse;font-size:11px}
+.mtm-table th{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);padding:5px 6px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
+.mtm-table th:not(:first-child):not(:nth-child(2)){text-align:right}
+.mtm-table td{padding:6px 6px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text);font-size:11px}
+.mtm-table td.num{text-align:right;font-family:'Raleway',sans-serif;font-weight:700;font-size:12px;color:var(--blue)}
+.mtm-table td.code{font-family:monospace;font-weight:700;color:var(--blue-deeper);background:var(--blue-light);border-radius:4px;padding:3px 6px;font-size:11px;white-space:nowrap}
+.mtm-table tr:last-child td{border-bottom:none}
+.mtm-table tr.total-row td{border-top:2px solid var(--border);font-weight:700;background:var(--gray-light)}
+.mtm-table tr.total-row td.num{color:var(--dark);font-size:14px}
+.mtm-table tr:hover td{background:var(--blue-light)}
+.mtm-table tr.total-row:hover td{background:var(--gray-light)}
+
+.obs-area{padding:0 1.25rem 1.25rem}
+.obs-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--blue-deeper);line-height:1.6}
+.obs-box strong{display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.8px}
+
+.btn-export{width:calc(100% - 2.5rem);margin:0 1.25rem 1.25rem;height:40px;background:var(--green);color:white;border:none;border-radius:8px;font-family:'Raleway',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-export:hover{background:#008A40}
+
+/* ERROR */
+.error-box{margin:1rem 1.25rem;padding:10px 12px;background:var(--red-light);border:1px solid #FFCDD2;border-radius:8px;font-size:12px;color:var(--red);line-height:1.5}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate{animation:fadeUp .3s ease forwards}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">
+    <div class="logo-mark"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6.5" r="3.5" fill="#FFE600"/><path d="M2.5 17.5c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="#FFE600" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+    <div><div class="logo-name">Mercado Libre</div><div class="logo-sub">Herramientas MTM</div></div>
+  </a>
+  <div class="header-right">
+    <a class="btn-voltar" href="MTM_Hub_ES.html" id="btnVoltar">← Página inicial</a>
+    <a class="lang-link" href="Analisador_MTM_Video.html" id="btnLang">🇧🇷 Português</a>
+    <span class="badge">MTM — Análisis</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">MTM-UAS / MTM-LOG</div>
+  <div class="hero-title-wrap">
+    <div class="hero-ml-icon"><svg viewBox="0 0 26 26" fill="none"><circle cx="13" cy="8" r="4.5" fill="#FFE600"/><path d="M2 24c0-6.075 4.925-11 11-11s11 4.925 11 11" stroke="#FFE600" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+    <h1>Análisis MTM</h1>
+  </div>
+  <p>Sube un video de un proceso operacional y recibe el análisis MTM completo — código, TMU, Q×F y tiempo de ciclo — generado automáticamente por IA con base en las capacidades MTM-UAS y MTM-LOG.</p>
+</div>
+
+<div class="container">
+<div class="layout">
+<div>
+
+  <!-- API KEY -->
+  <div class="card">
+    <div class="card-header"><div class="card-icon">🔑</div><div><h2>Configuración de la API Gemini</h2><p>Tu clave se guarda localmente en el navegador</p></div></div>
+    <div class="card-body">
+      <div class="field">
+        <label>Clave de la API Google Gemini <span class="hint">(empieza con AIza...)</span></label>
+        <div class="api-row">
+          <input type="password" id="apiKey" placeholder="AIzaSy..." oninput="checkApiKey()">
+          <button class="btn-sm" onclick="saveKey()">Guardar</button>
+          <button class="btn-sm secondary" onclick="clearKey()">Limpiar</button>
+        </div>
+        <div id="api-status" class="field-comment" style="margin-top:6px">
+          Ingresa tu clave de API para habilitar el análisis. Obtén en: <strong>aistudio.google.com</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOAD DE VÍDEO -->
+  <div class="card">
+    <div class="card-header"><div class="card-icon">🎬</div><div><h2>Video del proceso</h2><p>Subir el video a analizar</p></div></div>
+    <div class="card-body">
+      <div class="drop-zone" id="dropZone" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+        <input type="file" accept="video/*" onchange="onFileSelect(event)">
+        <div class="drop-icon">🎥</div>
+        <div class="drop-title">Arrastra el video aquí o haz clic para seleccionar</div>
+        <div class="drop-sub">MP4, MOV, AVI, WebM — hasta 20MB recomendado</div>
+        <div class="drop-preview" id="dropPreview" style="display:none">
+          <video id="videoPreview" controls></video>
+          <div class="drop-filename" id="dropFilename"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIGURAÇÃO DA ANÁLISE -->
+  <div class="card">
+    <div class="card-header"><div class="card-icon">⚙️</div><div><h2>Configuración del análisis</h2><p>Contextualiza para obtener resultados más precisos</p></div></div>
+    <div class="card-body">
+      <div class="field">
+        <label>Tipo de proceso</label>
+        <div class="proc-types">
+          <button class="proc-btn active" onclick="setProc('inhub',this)"><span class="proc-icon">📦</span>Inhub / Descarga</button>
+          <button class="proc-btn" onclick="setProc('sorting',this)"><span class="proc-icon">🔀</span>Sorting / Pesca</button>
+          <button class="proc-btn" onclick="setProc('armado',this)"><span class="proc-icon">🏗️</span>Armado de HU</button>
+          <button class="proc-btn" onclick="setProc('despacho',this)"><span class="proc-icon">🚛</span>Despacho / Carga</button>
+          <button class="proc-btn" onclick="setProc('transporte',this)"><span class="proc-icon">🚜</span>Transporte / Movim.</button>
+          <button class="proc-btn" onclick="setProc('outro',this)"><span class="proc-icon">🔧</span>Otro proceso</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Descripción del proceso <span class="hint">(opcional, pero mejora la precisión)</span></label>
+        <textarea id="descProcesso" placeholder="Ej: Operador toma paquete del baker, camina hasta la esteira, bipea con HH e induce al flow rack. Distancia aproximada: 3m. Paquetes de peso medio (~2kg)." rows="4"></textarea>
+        <div class="field-comment">Describe brevemente lo que ocurre en el video — equipamientos utilizados, distancias estimadas, tipo de paquete y peso.</div>
+      </div>
+      <div class="field">
+        <label>Factor de fatiga <span class="hint">(%)</span></label>
+        <div style="display:flex;gap:10px;align-items:center">
+          <select id="fadiga" style="width:auto;height:38px;border:1.5px solid var(--border);border-radius:8px;padding:0 10px;font-size:13px;font-family:Inter,sans-serif;outline:none">
+            <option value="0">Sin fatiga (0%)</option>
+            <option value="12" selected>Sorteable (12%)</option>
+            <option value="15">Voluminoso (15%)</option>
+            <option value="20">Pesado &gt;8kg (20%)</option>
+          </select>
+          <span style="font-size:12px;color:var(--gray)">Se aplicará al tiempo total</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Número de ciclos en el video <span class="hint">(cuántas repeticiones del proceso aparecen)</span></label>
+        <input type="text" id="numCiclos" value="1" style="width:80px">
+        <div class="field-comment">Si el video contiene múltiples ciclos, el análisis calculará el promedio automáticamente.</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-analyze" id="btnAnalyze" onclick="analisar()" disabled>
+    <span>🔍</span> Analizar con Gemini AI
+  </button>
+
+  <!-- INFO -->
+  <div style="margin-top:16px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:10px;padding:1rem 1.25rem;font-size:12px;color:var(--blue-deeper);line-height:1.6">
+    <strong style="display:block;margin-bottom:4px;font-size:11px;letter-spacing:.8px;text-transform:uppercase">Cómo funciona</strong>
+    El video se envía a Google Gemini con toda la base MTM-UAS y MTM-LOG integrada en el prompt. La IA identifica cada movimiento, aplica las reglas de clasificación (rango de distancia, caso de tomar, peso, precisión) y retorna la tabla de análisis con código, TMU, Q×F y total. El resultado es un primer análisis — siempre valida con un analista MTM certificado.
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-sticky">
+  <div class="card">
+    <div class="result-header">
+      <div class="r-label">Resultado da Análisis MTM</div>
+      <div class="r-title">MTM-UAS / MTM-LOG</div>
+    </div>
+    <div id="result-area">
+      <div class="empty-state">
+        <div class="empty-icon">📊</div>
+        <p>Configura la API, sube el video y haz clic en <strong>Analisar</strong> para ver la tabla MTM generada automáticamente.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+// ── Estado ────────────────────────────────────────────────────────────────
+var selectedFile = null;
+var selectedProc = 'inhub';
+var currentResult = null;
+
+// ── API Key ───────────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem('gemini_api_key');
+  if (saved) {
+    document.getElementById('apiKey').value = saved;
+    checkApiKey();
+  }
+});
+
+function saveKey() {
+  var key = document.getElementById('apiKey').value.trim();
+  if (!key) return;
+  localStorage.setItem('gemini_api_key', key);
+  checkApiKey();
+  showStatus('ok', '✅ Clave guardada con éxito en el navegador.');
+}
+
+function clearKey() {
+  localStorage.removeItem('gemini_api_key');
+  document.getElementById('apiKey').value = '';
+  checkApiKey();
+  showStatus('info', 'Clave eliminada. Ingresa una nueva clave para continuar.');
+}
+
+function checkApiKey() {
+  var key = document.getElementById('apiKey').value.trim();
+  var hasFile = selectedFile !== null;
+  var valid = key.length > 10;
+  document.getElementById('btnAnalyze').disabled = !(valid && hasFile);
+  if (valid && !localStorage.getItem('gemini_api_key')) {
+    showStatus('warn', '⚠️ Clave detectada pero no guardada. Haz clic en "Guardar" para persistir.');
+  } else if (valid) {
+    showStatus('ok', '✅ Clave configurada. ' + (hasFile ? '¡Listo para analizar!' : 'Ahora sube el video.'));
+  }
+}
+
+function showStatus(type, msg) {
+  var el = document.getElementById('api-status');
+  el.className = 'field-comment ' + (type === 'ok' ? 'ok' : type === 'warn' ? 'warn' : '');
+  el.innerHTML = msg;
+}
+
+// ── Processo buttons ──────────────────────────────────────────────────────
+function setProc(proc, btn) {
+  selectedProc = proc;
+  document.querySelectorAll('.proc-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+// ── Upload / Drop ─────────────────────────────────────────────────────────
+function onDragOver(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.add('drag-over');
+}
+function onDragLeave(e) {
+  document.getElementById('dropZone').classList.remove('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drag-over');
+  var file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('video/')) loadFile(file);
+}
+function onFileSelect(e) {
+  var file = e.target.files[0];
+  if (file) loadFile(file);
+}
+function loadFile(file) {
+  selectedFile = file;
+  var url = URL.createObjectURL(file);
+  var preview = document.getElementById('dropPreview');
+  var video = document.getElementById('videoPreview');
+  var fname = document.getElementById('dropFilename');
+  video.src = url;
+  fname.textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(1) + ' MB)';
+  preview.style.display = 'block';
+  checkApiKey();
+}
+
+// ── Converter arquivo para base64 ─────────────────────────────────────────
+function fileToBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var b64 = e.target.result.split(',')[1];
+      resolve(b64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── PROMPT MTM completo ───────────────────────────────────────────────────
+function buildPrompt(procType, descricao, numCiclos, fadiga) {
+  var procLabels = {
+    inhub: 'Inhub / Descarga de Line Haul',
+    sorting: 'Sorting / Pesca en flow rack o baker',
+    armado: 'Armado de HU (montaje de unidad de handling)',
+    despacho: 'Despacho / Carga de camión',
+    transporte: 'Transporte / Movimentación con equipamiento (paletera, tugger, montacargas)',
+    outro: 'Proceso operacional general'
+  };
+  var procLabel = procLabels[procType] || 'Proceso operacional';
+
+  return `Você é um especialista certificado em MTM (Methods-Time Measurement), com profundo conhecimento em MTM-UAS (Sistema de Análise Universal) e MTM-LOG (Processos Padronizados Logísticos). Você trabalha na Mercado Libre analisando processos de Service Center (SVC) e Cross Docking (XD).
+
+TAREFA: Analise o vídeo fornecido e produza uma análise MTM completa seguindo rigorosamente as regras do sistema MTM-UAS e MTM-LOG.
+
+TIPO DE PROCESO EN EL VIDEO: ${procLabel}
+${descricao ? 'DESCRIPCIÓN ADICIONAL: ' + descricao : ''}
+NÚMERO DE CICLOS EN EL VIDEO: ${numCiclos}
+FACTOR DE FATIGA A APLICAR: ${fadiga}%
+
+=== BASE DE CONHECIMENTO MTM-UAS — PROCESSOS BÁSICOS ===
+
+**APANHAR E COLOCAR NO LUGAR (AA, AH, AL, AD)**
+- AA = objeto pequeno/leve ≤1kg, faixa 1-3 → 14/20/30 TMU
+- AH = objeto médio 1-8kg, faixa 1-3 → 20/30/45 TMU
+- AL = objeto grande/pesado >8kg, faixa 1-3 → 35/45/70 TMU
+- AD = objeto difícil (frágil, inseguro, enrolado), faixa 1-3 → 35/50/75 TMU
+- Faixa 1: ≤40cm | Faixa 2: 41-80cm | Faixa 3: >80cm (estimada pela distância média de alcançar + mover)
+- Adicionar PA1(+5 TMU) se Colocar no Lugar com precisão; PA2(+10 TMU) média precisão; PA3(+20 TMU) alta precisão
+- Interrupção por Movimento do Corpo → adicionar Colocar no Lugar extra (PC1=10, PC2=20, PC3=30 TMU)
+
+**COLOCAR NO LUGAR (PC1, PC2, PC3)**
+- PC1 = sem precisão (soltar) → 10 TMU
+- PC2 = precisão média (encaixe fácil) → 20 TMU
+- PC3 = alta precisão (ajuste necessário) → 30 TMU
+
+**MANUSEIO DE MEIOS AUXILIARES (HC, HB)**
+- HC1/HC2/HC3 = apanhar+mover+depositar ferramenta leve, faixa 1/2/3 → 30/50/70 TMU
+- HB1/HB2/HB3 = ferramenta pesada/volumosa, faixa 1/2/3 → 50/70/90 TMU
+
+**ACIONAR (BA, BB, ZA, ZB, ZC, ZD)**
+- BA1 = acionar simples 1 dedo (botão, tecla) → 10 TMU
+- BA2 = acionar composto (botão + verificar) → 25 TMU
+- BB1 = acionar bilateral simples → 15 TMU
+- BB2 = acionar bilateral composto → 45 TMU
+- ZA1/ZA2/ZA3 = acionar alavanca/manete, faixa 1/2/3 → 5/10/15 TMU
+- ZB1/ZB2 = girar 180°/360° → 8/16 TMU × Q (quantidade de giros)
+- ZC = recolocar (quando ferramenta escorrega) → 10 TMU
+- ZD = forçar/pressionar com força → 5 TMU
+
+**CICLOS DE MOVIMENTO (WF, WK, WV — para carrinhos e carros de transporte)**
+Carrinhos de transporte (WF=dirigir/empurrar, WK=curva 90°, WV=inércia):
+- WFA ≤50kg: WFA=25 TMU/m | WKA=15 TMU | WVA=35 TMU
+- WFB ≤100kg: WFB=28 TMU/m | WKB=11 TMU | WVB=45 TMU
+- WFC ≤200kg: WFC=30 TMU/m | WKC=8 TMU | WVC=80 TMU
+- WFD >200kg: WFD=35 TMU/m | WKD=8 TMU | WVD=105 TMU
+
+**MOVIMENTOS DO CORPO (KA, KB, KT)**
+- KA = caminhar, por metro → 15 TMU/m (andar normal a ~1,3m/s)
+- KB = agachar/levantar (flexão joelho ≥45°) → 34 TMU (ida+volta = 2×34=68 TMU)
+- KT = girar/virar corpo 90° → 18 TMU
+
+**CONTROLE VISUAL (VA)**
+- VA = verificar/ler (cada verificação distinta) → 10 TMU
+
+=== MTM-LOG — TRANSPORTE LOGÍSTICO ===
+
+**TRANSPALETEIRA (HFFA/HFFB = dirigir/m; HFKA/B = curva 90°; HFVA/B = inércia)**
+- ≤500kg: HFFA=30/m, HFKA=15, HFVA=80; Apanhar HU: HAMA=520 (acertar), HAOA=350 (sem acertar)
+- >500kg: HFFB=35/m, HFKB=19, HFVB=150; Apanhar HU: HAMB=615, HAOB=415
+- Colocar HU: HPMA=295/HPOB=130 TMU
+
+**EMPILHADEIRA FRONTAL (SFIS/SFIL = dirigir interno; SFKS/L = curva 90°; SFVB = inércia)**
+- Estável: SFIS=13 TMU/m, SFKS=16 TMU, SFVB=56 TMU (carregado)
+- Instável: SFIL=17 TMU/m, SFKL=56 TMU
+
+**REBOCADOR / TUGGER (EFIM = com reboque/m; EFKO = curva ≤2 reboques)**
+- Com reboque: EFIM=13 TMU/m, EFKO=38 TMU, EFVM=56 TMU (inércia)
+- Acoplar com acerto: EANM=368 TMU | Desacoplar: EABM=285 TMU
+
+**SEQUÊNCIAS EMPILHADEIRA (apanhar+transportar+colocar)**
+- Solo → Solo: SAAA (Frontal FO) = 603 TMU | (Retrátil SO) = 718 TMU
+- Adicionar por metro de deslocamento: SFIS=13 TMU/m
+
+=== PROCESSOS ESPECÍFICOS DO MERCADO LIBRE (VALORES REAIS DAS ANÁLISES) ===
+
+**Indução 90° Flow Rack Aleatório:** T.ciclo = 4,82s → 747 pcts/h
+- Levar backer: AM3×0,007 + WVB×0,007 + WKB×0,007×2 + WFB×0,007×0,5 + WVB×0,007 = 0,062s
+- Colocar pacote na tolva: AA2×0,5 + AH2×0,4 + AL2×0,1 + KB×0,333 + KA×0,5 + VA×1 + PA1×1 + ZA2×1 + KA×0,5 = 4,67s
+- Retornar backer: AM3×0,007 + WFA×0,007×3 + WKA×0,007×2 + WVA×0,007 = 0,09s
+
+**Pesca Flow Duplo + Conveyor:** T.ciclo = 6,70s → 538 pcts/h
+**Armado HU 1 Flow 2x2 6 Gaylords:** T.ciclo = 10,43s → 345 pcts/h
+**Goleiro (Reindução):** T.ciclo = 3,06s → 1.175 pcts/h
+**Descarga na doca (paletera manual):** T.ciclo = 62s → 58 pcts/h por HU
+**Stage In Paletera Elétrica Triple:** T.ciclo = 0,44s/pct → 8.108 pcts/h
+
+=== REGRAS DE ANÁLISE ===
+
+1. **Faixa de distância**: determine observando a distância média percorrida pela mão/braço. Faixa 1 ≤40cm (área de trabalho imediata), Faixa 2 40-80cm, Faixa 3 >80cm (fora da área de trabalho).
+2. **Peso**: classifique AA (≤1kg), AH (1-8kg), AL (>8kg). Para pacotes de e-commerce: pequenos=AA, médios=AH, grandes=AL.
+3. **Frequência (Q×F)**: quantas vezes o movimento ocorre por ciclo.
+4. **Movimentos simultâneos**: dois movimentos ao mesmo tempo com esforço de controle diferente → analise o mais lento.
+5. **Interrupções**: se Apanhar e Colocar no Lugar é interrompido por Movimento do Corpo ou outro processo básico → adicionar PC adicional.
+6. **Fadiga**: aplique o fator ao final: Total TMU × (1 + fadiga%).
+
+=== FORMATO DE SAÍDA OBRIGATÓRIO ===
+
+Responda SOMENTE com um JSON válido, sem markdown, sem texto adicional, exatamente neste formato:
+
+{
+  "processo": "Nome do processo identificado",
+  "equipamentos": "Equipamentos observados no vídeo",
+  "ciclos_analisados": 1,
+  "linhas": [
+    {
+      "n": 1,
+      "descricao": "Descrição do movimento",
+      "bloco": "Nome do bloco MTM (ex: Levar backer)",
+      "codigo": "AM3",
+      "tmu": 0.031,
+      "freq": "0,007",
+      "quantidade": 1,
+      "total_tmu": 0.031
+    }
+  ],
+  "total_tmu_sem_fadiga": 0,
+  "total_tmu_com_fadiga": 0,
+  "tempo_ciclo_segundos": 0,
+  "capacidade_por_hora": 0,
+  "observacoes": "Observações importantes sobre a análise, incertezas, movimentos não identificados claramente, sugestões de melhoria de método",
+  "confiabilidade": "Alta/Média/Baixa",
+  "motivo_confiabilidade": "Explicação da confiabilidade"
+}
+
+IMPORTANTE: Seja detalhado nas linhas — descreva cada movimento individual com seu código MTM correto. Se o vídeo não estiver claro em algum ponto, indique na coluna descrição com "(estimado)" e explique nas observações.`;
+}
+
+// ── ANALISAR ──────────────────────────────────────────────────────────────
+async function analisar() {
+  var apiKey = document.getElementById('apiKey').value.trim() || localStorage.getItem('gemini_api_key');
+  if (!apiKey) { alert('Ingresa la clave de la API Gemini.'); return; }
+  if (!selectedFile) { alert('Selecciona un video.'); return; }
+
+  var descricao = document.getElementById('descProcesso').value.trim();
+  var numCiclos = parseInt(document.getElementById('numCiclos').value) || 1;
+  var fadiga    = parseFloat(document.getElementById('fadiga').value) || 0;
+
+  // show loading
+  document.getElementById('result-area').innerHTML = `
+    <div class="loading-area">
+      <div class="spinner"></div>
+      <div class="loading-text">Enviando vídeo ao Google Gemini...</div>
+      <div class="loading-step" id="loadingStep">📤 Convertendo vídeo...</div>
+    </div>`;
+  document.getElementById('btnAnalyze').disabled = true;
+
+  try {
+    updateStep('📤 Convirtiendo video para envío...');
+    var b64 = await fileToBase64(selectedFile);
+    var mimeType = selectedFile.type || 'video/mp4';
+
+    updateStep('🧠 Enviando a Gemini y esperando análisis MTM...');
+
+    var prompt = buildPrompt(selectedProc, descricao, numCiclos, fadiga);
+
+    var body = {
+      contents: [{
+        parts: [
+          { text: prompt },
+          { inline_data: { mime_type: mimeType, data: b64 } }
+        ]
+      }],
+      generationConfig: {
+        temperature: 0.1,
+        maxOutputTokens: 8192
+      }
+    };
+
+    var resp = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=' + apiKey,
+      { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }
+    );
+
+    if (!resp.ok) {
+      var err = await resp.json();
+      throw new Error(err.error?.message || 'Erro na API: ' + resp.status);
+    }
+
+    updateStep('📊 Procesando resultado...');
+    var data = await resp.json();
+    var text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+    // parse JSON da resposta
+    var json;
+    try {
+      var clean = text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+      json = JSON.parse(clean);
+    } catch(e) {
+      // tentar extrair JSON do texto
+      var match = text.match(/\{[\s\S]*\}/);
+      if (match) { json = JSON.parse(match[0]); }
+      else { throw new Error('No fue posible interpretar la respuesta de la IA. Intenta nuevamente o mejora la descripción del proceso.'); }
+    }
+
+    renderResult(json, fadiga);
+    currentResult = json;
+
+  } catch(err) {
+    document.getElementById('result-area').innerHTML =
+      '<div class="error-box">❌ <strong>Erro:</strong> ' + err.message + '<br><br>Verifique se a chave está correta, se o vídeo não está muito grande (tente <20MB) e tente novamente.</div>';
+  }
+
+  document.getElementById('btnAnalyze').disabled = false;
+}
+
+function updateStep(msg) {
+  var el = document.getElementById('loadingStep');
+  if (el) el.textContent = msg;
+}
+
+// ── RENDER RESULT ─────────────────────────────────────────────────────────
+function renderResult(json, fadiga) {
+  var linhas = json.linhas || [];
+  var totalSem = json.total_tmu_sem_fadiga || linhas.reduce(function(s,l){ return s + (l.total_tmu||0); }, 0);
+  var totalCom = json.total_tmu_com_fadiga || totalSem * (1 + fadiga/100);
+  var tcSeg    = json.tempo_ciclo_segundos || (totalCom * 0.036);
+  var cap      = json.capacidade_por_hora  || Math.round(3600 / tcSeg);
+  var conf     = json.confiabilidade || 'Média';
+  var confColor = conf === 'Alta' ? 'var(--green)' : conf === 'Baixa' ? 'var(--red)' : 'var(--orange)';
+
+  // agrupar por bloco
+  var grupos = {};
+  var ordemGrupos = [];
+  linhas.forEach(function(l) {
+    var bloco = l.bloco || 'Geral';
+    if (!grupos[bloco]) { grupos[bloco] = []; ordemGrupos.push(bloco); }
+    grupos[bloco].push(l);
+  });
+
+  var html = '<div class="animate">';
+
+  // summary cards
+  html += '<div class="result-summary">';
+  html += '<div class="res-card hl"><div class="res-val">' + totalSem.toFixed(1) + '</div><div class="res-lbl">Total TMU (sem fadiga)</div></div>';
+  html += '<div class="res-card hl"><div class="res-val">' + totalCom.toFixed(1) + '</div><div class="res-lbl">Total TMU (com fadiga ' + fadiga + '%)</div></div>';
+  html += '<div class="res-card"><div class="res-val" style="color:var(--green)">' + tcSeg.toFixed(2) + 's</div><div class="res-lbl">Tempo de ciclo</div></div>';
+  html += '<div class="res-card"><div class="res-val" style="color:var(--blue)">' + cap.toLocaleString('es-AR') + '</div><div class="res-lbl">Capacidade pcts/h</div></div>';
+  html += '</div>';
+
+  // info processo
+  html += '<div style="padding:.6rem 1.25rem;border-bottom:1px solid var(--border);font-size:11px;color:var(--gray)">';
+  html += '<strong style="color:var(--dark)">' + (json.processo||'Processo') + '</strong>';
+  if (json.equipamentos) html += ' &nbsp;·&nbsp; ' + json.equipamentos;
+  html += ' &nbsp;·&nbsp; Confiabilidade: <strong style="color:' + confColor + '">' + conf + '</strong>';
+  html += '</div>';
+
+  // tabela
+  html += '<div class="result-table-wrap"><table class="mtm-table">';
+  html += '<thead><tr><th>Nº</th><th>Descrição</th><th>Código</th><th>TMU</th><th>Q×F</th><th>Total TMU</th></tr></thead><tbody>';
+
+  var n = 0;
+  var total = 0;
+  ordemGrupos.forEach(function(bloco) {
+    html += '<tr><td colspan="6" style="background:var(--gray-light);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);padding:5px 6px;font-family:Inter,sans-serif">' + bloco + '</td></tr>';
+    grupos[bloco].forEach(function(l) {
+      n++;
+      var t = l.total_tmu || (l.tmu * (parseFloat(l.quantidade)||1));
+      total += t;
+      var qf = l.freq ? (l.quantidade > 1 ? l.quantidade + 'x' + l.freq : l.freq) : (l.quantidade||1) + 'x';
+      html += '<tr>';
+      html += '<td style="color:var(--gray)">' + n + '</td>';
+      html += '<td style="max-width:160px">' + l.descricao + '</td>';
+      html += '<td><span class="code">' + l.codigo + '</span></td>';
+      html += '<td class="num">' + (l.tmu||0).toFixed(3) + '</td>';
+      html += '<td class="num" style="color:var(--gray)">' + qf + '</td>';
+      html += '<td class="num">' + t.toFixed(3) + '</td>';
+      html += '</tr>';
+    });
+  });
+
+  // total row
+  html += '<tr class="total-row">';
+  html += '<td colspan="5" style="text-align:left;font-family:Raleway,sans-serif">TOTAL (sem fadiga)</td>';
+  html += '<td class="num">' + totalSem.toFixed(3) + '</td>';
+  html += '</tr>';
+  html += '<tr class="total-row">';
+  html += '<td colspan="5" style="text-align:left;font-family:Raleway,sans-serif">TOTAL (com fadiga ' + fadiga + '%)</td>';
+  html += '<td class="num" style="color:var(--blue)">' + totalCom.toFixed(3) + '</td>';
+  html += '</tr>';
+
+  html += '</tbody></table></div>';
+
+  // observações
+  if (json.observacoes) {
+    html += '<div class="obs-area"><div class="obs-box"><strong>📝 Observações da Análise</strong>' + json.observacoes + '</div></div>';
+  }
+  if (json.motivo_confiabilidade) {
+    html += '<div class="obs-area" style="margin-top:-8px"><div class="obs-box" style="background:var(--gray-light);border-color:var(--border);color:var(--gray)"><strong>🎯 Confiabilidade</strong>' + json.motivo_confiabilidade + '</div></div>';
+  }
+
+  html += '<button class="btn-export" onclick="exportCSV()">📥 Exportar análise em CSV</button>';
+  html += '</div>';
+
+  document.getElementById('result-area').innerHTML = html;
+}
+
+// ── EXPORT CSV ────────────────────────────────────────────────────────────
+function exportCSV() {
+  if (!currentResult) return;
+  var linhas = currentResult.linhas || [];
+  var csv = 'N°;Descripción;Bloque;Código;TMU;Freq;Cant;Total TMU\n';
+  linhas.forEach(function(l, i) {
+    csv += (i+1) + ';' + l.descricao + ';' + (l.bloco||'') + ';' + l.codigo + ';' + l.tmu + ';' + l.freq + ';' + l.quantidade + ';' + l.total_tmu + '\n';
+  });
+  csv += '\nTotal sem fadiga;' + currentResult.total_tmu_sem_fadiga + '\n';
+  csv += 'Total con fatiga;' + currentResult.total_tmu_com_fadiga + '\n';
+  csv += 'Tiempo ciclo (s);' + currentResult.tempo_ciclo_segundos + '\n';
+  csv += 'Capacidad (pcts/h);' + currentResult.capacidade_por_hora + '\n';
+
+  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'Analise_MTM_' + (currentResult.processo||'processo').replace(/\s/g,'_') + '.csv';
+  a.click();
+}
+
+// ── LANG SWITCH ───────────────────────────────────────────────────────────
+var LANG = 'es';
+function setLang(lang) {
+  LANG = lang;
+  if (lang === 'es') {
+    document.getElementById('btnLang').textContent = '🇧🇷 Português';
+    document.getElementById('btnLang').href = 'Analise_MTM_PT.html';
+    document.getElementById('btnLang').onclick = function(e){ e.preventDefault(); setLang('pt'); };
+    document.getElementById('btnVoltar').textContent = '← Página inicial';
+    document.getElementById('btnVoltar').href = 'MTM_Hub_ES.html';
+    // hero
+    document.querySelector('.hero-tag').textContent = 'MTM-UAS / MTM-LOG';
+    document.querySelector('.hero h1').textContent = 'Análisis MTM';
+    document.querySelector('.hero p').textContent = 'Sube un video de un proceso operacional y recibe el análisis MTM completo — código, TMU, Q×F y tiempo de ciclo — generado automáticamente por IA con base en las capacidades MTM-UAS y MTM-LOG.';
+    document.querySelector('.logo-sub').textContent = 'Herramientas MTM';
+    document.querySelector('.badge').textContent = 'MTM — Análisis';
+    // card headers
+    var h2s = document.querySelectorAll('.card-header h2');
+    var subtitles = document.querySelectorAll('.card-header p');
+    var labels = ['Configuración API Gemini','Video del proceso','Configuración del análisis'];
+    var subs = ['Tu clave se guarda localmente en el navegador','Subir el video a analizar','Contextualiza para obtener resultados más precisos'];
+    h2s.forEach(function(h,i){ if(labels[i]) h.textContent = labels[i]; });
+    subtitles.forEach(function(s,i){ if(subs[i]) s.textContent = subs[i]; });
+    document.getElementById('btnAnalyze').innerHTML = '<span>🔍</span> Analizar con Gemini AI';
+    document.querySelector('.r-label').textContent = 'Resultado del Análisis MTM';
+    document.querySelector('.r-title').textContent = 'MTM-UAS / MTM-LOG';
+    document.querySelector('.empty-state p').innerHTML = 'Configura la API, sube el video y haz clic en <strong>Analizar</strong> para ver la tabla MTM generada automáticamente.';
+  } else {
+    document.getElementById('btnLang').textContent = '🇧🇷 Português';
+    document.getElementById('btnLang').href = 'Analise_MTM_ES.html';
+    document.getElementById('btnLang').onclick = function(e){ e.preventDefault(); setLang('es'); };
+    document.getElementById('btnVoltar').textContent = '← Página inicial';
+    document.getElementById('btnVoltar').href = 'MTM_Hub_PT.html';
+    document.querySelector('.hero-tag').textContent = 'MTM-UAS / MTM-LOG';
+    document.querySelector('.hero h1').textContent = 'Análisis MTM';
+    document.querySelector('.hero p').textContent = 'Sube un video de un proceso operacional y recibe el análisis MTM completo — código, TMU, Q×F y tiempo de ciclo — generado automáticamente por IA con base en las capacidades MTM-UAS y MTM-LOG.';
+    document.querySelector('.logo-sub').textContent = 'Herramientas MTM';
+    document.querySelector('.badge').textContent = 'MTM — Análisis';
+    document.getElementById('btnAnalyze').innerHTML = '<span>🔍</span> Analizar con Gemini AI';
+    document.querySelector('.r-label').textContent = 'Resultado da Análisis MTM';
+    document.querySelector('.r-title').textContent = 'MTM-UAS / MTM-LOG';
+    document.querySelector('.empty-state p').innerHTML = 'Configura la API, sube el video y haz clic en <strong>Analisar</strong> para ver la tabla MTM generada automáticamente.';
+  }
+}
+
+// make lang button toggle instead of navigate
+window.addEventListener('load', function() {
+  document.getElementById('btnLang').addEventListener('click', function(e) {
+    e.preventDefault();
+    setLang(LANG === 'es' ? 'pt' : 'es');
+  });
+});
+
+</script>
+</body>
+</html>
