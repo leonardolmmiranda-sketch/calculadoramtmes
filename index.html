@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTM Analyzer — Herramientas Operacionales | Mercado Libre</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--y:#FFF8DC;--ym:#F5E97A;--yd:#E8D98A;--yl:#FFFDF0;--b:#2C3E6B;--bd:#1E2D52;--bde:#15203D;--bl:#EEF2FF;--bm:#3D5490;--dark:#1A1A2E;--text:#333;--gray:#717171;--grl:#F5F5F5;--bor:#EBEBEB;--white:#fff;--green:#2E7D5E;--gnd:#1F5C44;--gnl:#E8F5EE;--purple:#5B3AA8;--pul:#EEE8FA;--orange:#C4631A;--orl:#FDF0E6;--teal:#0B7E8A;--tel:#E0F5F7;--indigo:#2E3F8F;--inl:#E8EAFA;--red:#C62828;--rdl:#FFEBEE;}
+body{font-family:'Inter',sans-serif;background:#EDEAE3;color:var(--text);min-height:100vh;font-size:14px}
+header{background:var(--y);height:56px;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--yd)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:var(--b);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{width:18px;height:18px}
+.logo-name{font-family:'Raleway',sans-serif;font-weight:800;font-size:16px;color:var(--bde)}
+.logo-sub{font-size:9px;font-weight:600;color:var(--bd);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-badge{background:var(--b);color:var(--ym);font-family:'Raleway',sans-serif;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px}
+.hdr-pill{font-size:11px;font-weight:600;color:var(--bde);text-decoration:none;background:rgba(255,255,255,0.7);padding:4px 12px;border-radius:20px;border:1px solid var(--yd)}
+.offline-badge{font-size:10px;font-weight:700;color:var(--gnd);background:var(--gnl);padding:3px 10px;border-radius:20px;border:1px solid rgba(46,125,94,0.2)}
+.layout{display:flex;height:calc(100vh - 56px);overflow:hidden}
+.panel-l{width:400px;min-width:340px;background:var(--white);border-right:2px solid var(--yd);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
+.panel-l-inner{padding:18px;flex:1}
+.panel-r{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F0EEE7}
+.inp-head{margin-bottom:10px}
+.inp-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--b);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.inp-head h2{font-family:'Raleway',sans-serif;font-size:17px;font-weight:800;color:var(--bde);letter-spacing:-.3px}
+.inp-head p{font-size:11px;color:var(--gray);margin-top:3px;line-height:1.5}
+textarea{width:100%;height:230px;border:1.5px solid var(--bor);border-radius:10px;padding:12px;font-family:'Inter',sans-serif;font-size:12px;resize:vertical;outline:none;line-height:1.6;color:var(--text);transition:border-color .2s}
+textarea:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(44,62,107,0.08)}
+.pfd-section{margin:12px 0 8px}
+.pfd-label{font-size:11px;font-weight:600;color:var(--bde);display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.pfd-row{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.pbt{padding:6px 4px;border:1.5px solid var(--bor);border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;text-align:center;background:var(--white);color:var(--gray);transition:.15s;line-height:1.3}
+.pbt b{display:block;font-size:11px;color:var(--bde);margin-top:1px}
+.pbt:hover{border-color:var(--bm);background:var(--bl)}
+.pbt.on{border-color:var(--b);background:var(--bl);color:var(--b)}
+.pbt.on b{color:var(--b)}
+.btn-run{width:100%;padding:12px;background:var(--b);color:var(--ym);border:none;border-radius:10px;font-family:'Raleway',sans-serif;font-size:14px;font-weight:800;cursor:pointer;margin-top:10px;letter-spacing:.3px;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-run:hover{background:var(--bm)}.btn-run:active{transform:scale(.98)}
+.ex-sec{margin-top:14px}
+.ex-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.ex-label::after{content:'';flex:1;height:1px;background:var(--bor)}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ex-btn{padding:7px 9px;background:var(--grl);border:1px solid var(--bor);border-radius:8px;cursor:pointer;font-size:11px;color:var(--text);text-align:left;line-height:1.3;transition:.12s;font-family:'Inter',sans-serif}
+.ex-btn:hover{background:var(--bl);border-color:var(--bm);color:var(--b)}
+.ex-btn .ex-icon{font-size:14px;display:block;margin-bottom:3px}
+.ex-btn .ex-name{font-weight:600;font-size:10px}
+.gloss-toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bde);color:var(--ym);border:none;border-radius:10px;cursor:pointer;font-family:'Raleway',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;margin:14px 18px 0;transition:.15s;text-align:left}
+.gloss-toggle span{font-size:14px;transition:transform .2s}
+.gloss-toggle.open span{transform:rotate(180deg)}
+.gloss-toggle:hover{background:var(--dark)}
+.gloss-body{display:none;padding:14px 18px 18px;background:var(--white);border-top:1px solid var(--bor)}
+.gloss-body.open{display:block}
+.gloss-intro{font-size:11px;color:var(--gray);line-height:1.5;margin-bottom:12px;padding:8px 10px;background:var(--bl);border-radius:6px;border-left:3px solid var(--b)}
+.gloss-cat{margin-bottom:12px}
+.gloss-cat-head{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.gloss-cat-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.gloss-cat-name{font-family:'Raleway',sans-serif;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.gloss-cat-code{font-size:10px;color:var(--gray);margin-left:auto;font-family:monospace;background:var(--grl);padding:1px 6px;border-radius:4px}
+.verbs-wrap{display:flex;flex-wrap:wrap;gap:4px}
+.verb-pill{font-size:10px;font-weight:500;padding:3px 8px;border-radius:12px;border:1px solid currentColor;opacity:.85}
+.stbar{padding:5px 16px;font-size:11px;font-weight:600;flex-shrink:0;display:none}
+.stbar.ok{background:var(--gnl);color:var(--gnd);border-bottom:1px solid rgba(46,125,94,0.2)}
+.stbar.run{background:#fff8e1;color:#7A4500;border-bottom:1px solid #ffe0b2}
+.stbar.err{background:var(--rdl);color:var(--red);border-bottom:1px solid #ffcdd2}
+.tabs{display:flex;background:var(--bde);padding:0 14px;overflow-x:auto;flex-shrink:0;gap:2px}
+.tab{padding:9px 13px;color:rgba(245,233,122,0.45);cursor:pointer;font-size:11px;font-weight:700;white-space:nowrap;border-bottom:2px solid transparent;transition:.15s;letter-spacing:.3px;font-family:'Raleway',sans-serif}
+.tab:hover{color:rgba(245,233,122,0.7)}.tab.on{color:var(--ym);border-bottom-color:var(--ym)}
+.tcont{display:none;flex:1;overflow-y:auto;padding:20px}.tcont.on{display:block}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:70%;color:#bbb;text-align:center;gap:10px}
+.empty .ico{font-size:40px}.empty p{font-size:13px;line-height:1.5;max-width:280px}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:18px}
+.kcard{background:var(--white);border:1px solid var(--bor);border-radius:10px;padding:14px;border-top:3px solid var(--ym)}
+.kcard.hi{background:var(--b);border-top-color:var(--ym)}
+.kcard .lbl{font-size:9px;color:var(--gray);text-transform:uppercase;font-weight:700;letter-spacing:.8px}
+.kcard.hi .lbl{color:rgba(245,233,122,0.6)}
+.kcard .val{font-size:22px;font-weight:800;font-family:'Raleway',sans-serif;margin:3px 0 1px;color:var(--bde)}
+.kcard.hi .val{color:var(--ym)}
+.kcard .sub{font-size:10px;color:var(--gray)}.kcard.hi .sub{color:rgba(245,233,122,0.5)}
+.sec-h{font-family:'Raleway',sans-serif;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--b);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-h::after{content:'';flex:1;height:1px;background:var(--bor)}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:18px;background:var(--white);border-radius:10px;overflow:hidden;border:1px solid var(--bor)}
+th{background:var(--bde);color:var(--ym);padding:8px 10px;text-align:left;font-weight:700;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:.5px;position:sticky;top:0;z-index:1}
+td{padding:7px 10px;border-bottom:1px solid var(--bor);vertical-align:middle}
+tr:hover td{background:var(--yl)}.tot td{background:#fff8cc!important;font-weight:700}
+.bd{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700}
+.bt{background:var(--bl);color:var(--b)}.bg{background:var(--gnl);color:var(--gnd)}
+.br{background:var(--rdl);color:var(--red)}.bpu{background:var(--pul);color:var(--purple)}
+.bv{background:#fff8e1;color:#7A4500}.ba{background:var(--tel);color:var(--teal)}
+.tv{font-weight:700;font-size:12px}
+.uas-b{display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;background:var(--bde);color:var(--ym);font-family:monospace}
+.acard{background:var(--white);border:1px solid var(--bor);border-left:4px solid var(--b);border-radius:10px;padding:14px;margin-bottom:10px}
+.acard .at{font-family:'Raleway',sans-serif;font-weight:800;font-size:13px;color:var(--bde);margin-bottom:5px}
+.acard .as{font-size:11px;color:var(--gray);font-style:italic;margin-bottom:8px;border-left:2px solid var(--bor);padding-left:8px}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;margin:1px}
+.tv2{background:var(--bl);color:var(--b)}.tg2{background:var(--gnl);color:var(--gnd)}.tt2{background:#fff8e1;color:#7A4500}
+.elist{list-style:none;margin-top:8px;border-top:1px solid var(--bor);padding-top:6px}
+.elist li{display:flex;align-items:baseline;gap:6px;padding:3px 0;border-bottom:1px dashed var(--bor);font-size:11px}
+.ec{font-weight:700;font-family:monospace;min-width:72px;font-size:11px;color:var(--bde)}
+.ed{flex:1;color:var(--text)}.er{font-size:10px;color:var(--gray);flex:2}
+.et2{color:var(--gray);font-family:monospace;min-width:52px;text-align:right;font-size:11px}
+.atot{text-align:right;font-weight:700;font-size:11px;margin-top:6px;color:var(--b);font-family:'Raleway',sans-serif}
+.gap-item{padding:10px 12px;border-radius:8px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.g-crit{background:var(--rdl);border-left:3px solid var(--red)}
+.g-warn{background:#fff8e1;border-left:3px solid #f59e0b}
+.g-info{background:var(--bl);border-left:3px solid var(--b)}
+.g-ok{background:var(--gnl);border-left:3px solid var(--green)}
+.gi{font-size:16px}.gc .gt{font-weight:700;font-size:12px;color:var(--bde)}.gc .gd{font-size:11px;color:var(--gray);margin-top:2px}
+.gc .gs{font-size:11px;color:var(--b);margin-top:4px;font-style:italic}
+.gbar{margin-bottom:10px}
+.gbar .bh{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;font-weight:500}
+.gbar .bg2{background:var(--bor);border-radius:4px;height:14px;overflow:hidden}
+.gbar .bf{height:100%;background:var(--ym);border-radius:4px;transition:width .5s}
+.gbar .bf.r{background:#f44336}
+.exp-bar{display:flex;gap:7px;padding:10px 16px;background:var(--white);border-top:1px solid var(--bor);flex-shrink:0}
+.bex{padding:7px 14px;border:1.5px solid var(--bde);border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;background:var(--white);color:var(--bde);transition:.15s;font-family:'Raleway',sans-serif;letter-spacing:.3px}
+.bex:hover{background:var(--bde);color:var(--ym)}
+.bex.p{background:var(--b);color:var(--ym);border-color:var(--b)}.bex.p:hover{background:var(--bde)}
+@media(max-width:860px){.layout{flex-direction:column}.panel-l{width:100%;height:auto}.panel-r{height:55vh}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#">
+    <div class="logo-mark">
+      <svg viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="6.5" r="3.5" fill="#F5E97A"/>
+        <path d="M2.5 17.5c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5" stroke="#F5E97A" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-name">Mercado Libre</div>
+      <div class="logo-sub">Herramientas MTM</div>
+    </div>
+  </a>
+  <div class="hdr-right">
+    <a class="hdr-pill" href="#">Inicio</a>
+    <a class="hdr-pill" href="mtm-analyzer.html">🇧🇷 Português</a>
+    <span class="hdr-badge">MTM</span>
+  </div>
+</header>
+<div class="layout">
+<div class="panel-l">
+<div class="panel-l-inner">
+  <div class="inp-head">
+    <div class="inp-eyebrow">⚙️ Análisis Automático</div>
+    <h2>Describe el proceso</h2>
+    <p>Escribe en español, usa lista numerada o texto libre. El engine detecta verbos y genera el análisis MTM-1 + UAS completo.</p>
+  </div>
+  <textarea id="procInput" placeholder="Ejemplo:
+1. Tomar producto del estante (30cm)
+2. Escanear código de barras
+3. Colocar en la caja (25cm)
+4. Cerrar la caja
+5. Pegar etiqueta de envío
+6. Pesar en la báscula (0.5kg)
+7. Caminar hasta la banda transportadora (3 metros)"></textarea>
+  <div class="pfd-section">
+    <div class="pfd-label">⚡ Fatiga / PFD</div>
+    <div class="pfd-row">
+      <div class="pbt on" onclick="setPFD('leve',this)">Leve<b>+15%</b></div>
+      <div class="pbt" onclick="setPFD('moderada',this)">Moderado<b>+20%</b></div>
+      <div class="pbt" onclick="setPFD('pesada',this)">Pesado<b>+25%</b></div>
+      <div class="pbt" onclick="setPFD('frio',this)">Frío<b>+25%</b></div>
+    </div>
+  </div>
+  <button class="btn-run" onclick="runAnalysis()">
+    <span>⚡</span> Analizar Proceso <span style="font-size:11px;opacity:.7">(Ctrl+Enter)</span>
+  </button>
+  <div class="ex-sec">
+    <div class="ex-label">Ejemplos listos</div>
+    <div class="ex-grid">
+      <button class="ex-btn" onclick="loadEx(0)"><span class="ex-icon">🛒</span><span class="ex-name">Picking Dark Store</span></button>
+      <button class="ex-btn" onclick="loadEx(1)"><span class="ex-icon">📦</span><span class="ex-name">Pedido Completo</span></button>
+      <button class="ex-btn" onclick="loadEx(2)"><span class="ex-icon">🔄</span><span class="ex-name">Triaje Devolución</span></button>
+      <button class="ex-btn" onclick="loadEx(3)"><span class="ex-icon">🏭</span><span class="ex-name">Armado Embalaje</span></button>
+    </div>
+  </div>
+</div>
+<button class="gloss-toggle" id="glossBtn" onclick="toggleGloss()">
+  📖 Glosario de Movimientos Reconocidos <span>▾</span>
+</button>
+<div class="gloss-body" id="glossBody">
+  <div class="gloss-intro">
+    El engine reconoce <b>15 categorías de verbos</b> en español (infinitivo, gerundio, imperativo y pasado). Usa cualquiera de las palabras — el sistema identificará automáticamente el template MTM correspondiente.
+  </div>
+  <div class="gloss-cat">
+    <div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--bl)">🤲</div><div class="gloss-cat-name" style="color:var(--b)">Tomar / Agarrar</div><div class="gloss-cat-code">R + G → M + P + RL</div></div>
+    <div class="verbs-wrap">
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">tomar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">agarrar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">coger</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">recoger</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">sacar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">retirar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">quitar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">extraer</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">buscar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">jalar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">capturar</span>
+      <span class="verb-pill" style="color:var(--b);border-color:var(--bm);background:var(--bl)">obtener</span>
+    </div>
+  </div>
+  <div class="gloss-cat">
+    <div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--gnl)">📥</div><div class="gloss-cat-name" style="color:var(--gnd)">Colocar / Depositar</div><div class="gloss-cat-code">M + P + RL</div></div>
+    <div class="verbs-wrap">
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">colocar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">depositar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">poner</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">ubicar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">insertar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">soltar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">dejar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">empujar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">posicionar</span>
+      <span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl)">meter</span>
+    </div>
+  </div>
+  <div class="gloss-cat">
+    <div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:#e0f7fa">📡</div><div class="gloss-cat-name" style="color:var(--teal)">Escanear / Leer</div><div class="gloss-cat-code">R + G + M + APA + RL</div></div>
+    <div class="verbs-wrap">
+      <span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel)">escanear</span>
+      <span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel)">bipar</span>
+      <span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel)">leer código</span>
+      <span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel)">scan</span>
+      <span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel)">pistola RF</span>
+      <span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel)">pasar por lector</span>
+      <span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel)">código de barras</span>
+    </div>
+  </div>
+  <div class="gloss-cat">
+    <div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--pul)">🚶</div><div class="gloss-cat-name" style="color:var(--purple)">Caminar / Desplazarse</div><div class="gloss-cat-code">W-P × pasos + KA</div></div>
+    <div class="verbs-wrap">
+      <span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul)">caminar</span>
+      <span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul)">desplazarse</span>
+      <span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul)">andar</span>
+      <span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul)">ir a / ir hacia</span>
+      <span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul)">trasladarse</span>
+      <span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul)">dirigirse</span>
+    </div>
+  </div>
+  <div class="gloss-cat">
+    <div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:#fff8e1">👁️</div><div class="gloss-cat-name" style="color:#7A4500">Verificar / Revisar</div><div class="gloss-cat-code">EF / ET</div></div>
+    <div class="verbs-wrap">
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">verificar</span>
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">revisar</span>
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">chequear</span>
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">inspeccionar</span>
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">observar</span>
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">comprobar</span>
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">mirar</span>
+      <span class="verb-pill" style="color:#7A4500;border-color:#f59e0b;background:#fff8e1">constatar</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--rdl)">📦</div><div class="gloss-cat-name" style="color:var(--red);font-size:10px">Abrir Caja</div><div class="gloss-cat-code" style="font-size:9px">R+G+D+RL</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">abrir</span><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">rasgar</span><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">cortar cinta</span><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">desempacar</span></div></div>
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--rdl)">🔒</div><div class="gloss-cat-name" style="color:var(--red);font-size:10px">Cerrar Caja</div><div class="gloss-cat-code" style="font-size:9px">R+G+M+AP</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">cerrar</span><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">sellar</span><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">lacrar</span><span class="verb-pill" style="color:var(--red);border-color:var(--red);background:var(--rdl);font-size:9px">tapar</span></div></div>
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--inl)">🏷️</div><div class="gloss-cat-name" style="color:var(--indigo);font-size:10px">Etiquetar</div><div class="gloss-cat-code" style="font-size:9px">R+G1B+P2+AP</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--indigo);border-color:var(--indigo);background:var(--inl);font-size:9px">etiquetar</span><span class="verb-pill" style="color:var(--indigo);border-color:var(--indigo);background:var(--inl);font-size:9px">pegar etiqueta</span><span class="verb-pill" style="color:var(--indigo);border-color:var(--indigo);background:var(--inl);font-size:9px">aplicar etiqueta</span></div></div>
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--gnl)">⚖️</div><div class="gloss-cat-name" style="color:var(--gnd);font-size:10px">Pesar</div><div class="gloss-cat-code" style="font-size:9px">R+G+M+EF×2</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl);font-size:9px">pesar</span><span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl);font-size:9px">pesaje</span><span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl);font-size:9px">báscula</span><span class="verb-pill" style="color:var(--gnd);border-color:var(--green);background:var(--gnl);font-size:9px">balanza</span></div></div>
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--pul)">🔄</div><div class="gloss-cat-name" style="color:var(--purple);font-size:10px">Girar</div><div class="gloss-cat-code" style="font-size:9px">R+G+T+RL</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul);font-size:9px">girar</span><span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul);font-size:9px">rotar</span><span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul);font-size:9px">voltear</span><span class="verb-pill" style="color:var(--purple);border-color:var(--purple);background:var(--pul);font-size:9px">torcer</span></div></div>
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--tel)">🔘</div><div class="gloss-cat-name" style="color:var(--teal);font-size:10px">Presionar</div><div class="gloss-cat-code" style="font-size:9px">R+APA+RL</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel);font-size:9px">apretar</span><span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel);font-size:9px">presionar</span><span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel);font-size:9px">accionar</span><span class="verb-pill" style="color:var(--teal);border-color:var(--teal);background:var(--tel);font-size:9px">botón</span></div></div>
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--orl)">📐</div><div class="gloss-cat-name" style="color:var(--orange);font-size:10px">Armar Caja</div><div class="gloss-cat-code" style="font-size:9px">G4A+M+RL×4</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--orange);border-color:var(--orange);background:var(--orl);font-size:9px">armar caja</span><span class="verb-pill" style="color:var(--orange);border-color:var(--orange);background:var(--orl);font-size:9px">doblar caja</span><span class="verb-pill" style="color:var(--orange);border-color:var(--orange);background:var(--orl);font-size:9px">montar caja</span></div></div>
+    <div class="gloss-cat"><div class="gloss-cat-head"><div class="gloss-cat-icon" style="background:var(--bl)">🔃</div><div class="gloss-cat-name" style="color:var(--b);font-size:10px">Separar</div><div class="gloss-cat-code" style="font-size:9px">RC+G4A+M+RL</div></div><div class="verbs-wrap"><span class="verb-pill" style="color:var(--b);border-color:var(--b);background:var(--bl);font-size:9px">separar</span><span class="verb-pill" style="color:var(--b);border-color:var(--b);background:var(--bl);font-size:9px">seleccionar</span><span class="verb-pill" style="color:var(--b);border-color:var(--b);background:var(--bl);font-size:9px">clasificar</span><span class="verb-pill" style="color:var(--b);border-color:var(--b);background:var(--bl);font-size:9px">picking</span></div></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="gloss-cat-head" style="margin-bottom:6px"><div class="gloss-cat-icon" style="background:#e8e8f0">💡</div><div class="gloss-cat-name" style="color:var(--dark);font-size:10px">Palabras de Contexto</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:10px">
+      <div style="background:var(--grl);padding:6px 8px;border-radius:6px"><b>📏 Distancia:</b> "30cm", "2 metros", "cerca" (15cm), "lejos" (55cm), "al frente" (25cm)</div>
+      <div style="background:var(--grl);padding:6px 8px;border-radius:6px"><b>⚖️ Peso:</b> "2kg", "500g", "liviano" (0,3kg), "pesado" (6kg), "muy pesado" (12kg)</div>
+      <div style="background:var(--grl);padding:6px 8px;border-radius:6px"><b>⬇️ Nivel bajo:</b> "estante bajo", "suelo", "piso", "nivel bajo" → agrega KOK (29 TMU)</div>
+      <div style="background:var(--grl);padding:6px 8px;border-radius:6px"><b>🎯 Precisión:</b> "firme", "preciso", "ajustado", "encaje" → P2 (±0,4–1,5mm)</div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="panel-r">
+  <div id="stbar" class="stbar ok"></div>
+  <div class="tabs">
+    <div class="tab on" onclick="showTab('log',this)">📋 Razonamiento</div>
+    <div class="tab" onclick="showTab('mtm1',this)">🔬 MTM-1</div>
+    <div class="tab" onclick="showTab('uas',this)">🔷 MTM-UAS</div>
+    <div class="tab" onclick="showTab('kpi',this)">📊 KPIs</div>
+    <div class="tab" onclick="showTab('gap',this)">⚠️ Gaps</div>
+    <div class="tab" onclick="showTab('garb',this)">🎯 Cuellos de Botella</div>
+  </div>
+  <div id="log" class="tcont on"><div class="empty"><div class="ico">🔍</div><p>Pega la descripción del proceso y haz clic en <b>Analizar Proceso</b> para generar el análisis MTM-1 + UAS con razonamiento completo.</p></div></div>
+  <div id="mtm1" class="tcont"><div class="empty"><div class="ico">📐</div><p>El análisis MTM-1 detallado aparecerá aquí tras el análisis.</p></div></div>
+  <div id="uas" class="tcont"><div class="empty"><div class="ico">🔷</div><p>El análisis MTM-UAS Básico aparecerá aquí tras el análisis.</p></div></div>
+  <div id="kpi" class="tcont"><div class="empty"><div class="ico">📊</div><p>KPIs y comparativo MTM-1 vs UAS aparecerán aquí.</p></div></div>
+  <div id="gap" class="tcont"><div class="empty"><div class="ico">⚠️</div><p>Análisis de gaps e inconsistencias aparecerá aquí.</p></div></div>
+  <div id="garb" class="tcont"><div class="empty"><div class="ico">🎯</div><p>Análisis de cuellos de botella por categoría aparecerá aquí.</p></div></div>
+  <div class="exp-bar">
+    <button class="bex p" onclick="exportCSV()">⬇ Exportar CSV</button>
+    <button class="bex" onclick="copyAnalysis()">📋 Copiar Análisis</button>
+    <button class="bex" onclick="printReport()">🖨 Imprimir</button>
+    <span style="flex:1"></span>
+    <span id="expNote" style="font-size:10px;color:var(--gray);align-self:center"></span>
+  </div>
+</div>
+</div>
+</div><!-- /layout -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// MTM-1 TABLES
+// ═══════════════════════════════════════════════════════════════
+const RT={2:{A:2.0,B:2.0,C:2.0,D:2.0,E:1.6},4:{A:3.4,B:3.4,C:5.1,D:3.2,E:3.0},6:{A:4.5,B:4.5,C:6.5,D:4.4,E:3.9},8:{A:5.5,B:5.5,C:7.5,D:5.5,E:4.6},10:{A:6.1,B:6.3,C:8.4,D:6.8,E:4.9},12:{A:6.4,B:7.4,C:9.1,D:7.3,E:5.2},14:{A:6.8,B:8.2,C:9.7,D:7.8,E:5.5},16:{A:7.1,B:8.8,C:10.3,D:8.2,E:5.8},18:{A:7.5,B:9.4,C:10.8,D:8.7,E:6.1},20:{A:7.8,B:10.0,C:11.4,D:9.2,E:6.5},22:{A:8.1,B:10.5,C:11.9,D:9.7,E:6.8},24:{A:8.5,B:11.1,C:12.5,D:10.2,E:7.1},26:{A:8.8,B:11.7,C:13.0,D:10.7,E:7.4},28:{A:9.2,B:12.2,C:13.6,D:11.2,E:7.7},30:{A:9.5,B:12.8,C:14.1,D:11.7,E:8.0},35:{A:10.4,B:14.2,C:15.5,D:12.9,E:8.8},40:{A:11.3,B:15.6,C:16.8,D:14.1,E:9.6},45:{A:12.1,B:17.0,C:18.2,D:15.3,E:10.4},50:{A:13.0,B:18.4,C:19.6,D:16.5,E:11.2},55:{A:13.9,B:19.8,C:20.9,D:17.8,E:12.0},60:{A:14.7,B:21.2,C:22.3,D:19.0,E:12.8},65:{A:15.6,B:22.6,C:23.6,D:20.2,E:13.5},70:{A:16.5,B:24.1,C:25.0,D:21.4,E:14.3},75:{A:17.3,B:25.5,C:26.4,D:22.6,E:15.1},80:{A:18.2,B:26.9,C:27.7,D:23.9,E:15.9}};
+const MT={2:{A:2.0,B:2.0,C:2.0},4:{A:3.1,B:4.0,C:4.5},6:{A:4.1,B:5.0,C:5.8},8:{A:5.1,B:5.9,C:6.9},10:{A:6.0,B:6.8,C:7.9},12:{A:6.9,B:7.7,C:8.8},14:{A:7.7,B:8.5,C:9.8},16:{A:8.3,B:9.2,C:10.5},18:{A:9.0,B:9.8,C:11.1},20:{A:9.6,B:10.5,C:11.7},22:{A:10.2,B:11.2,C:12.4},24:{A:10.8,B:11.8,C:13.0},26:{A:11.5,B:12.3,C:13.7},28:{A:12.1,B:12.8,C:14.4},30:{A:12.7,B:13.3,C:15.1},35:{A:14.3,B:14.5,C:16.8},40:{A:15.8,B:15.6,C:18.5},45:{A:17.4,B:16.8,C:20.1},50:{A:19.0,B:18.0,C:21.8},55:{A:20.5,B:19.2,C:23.5},60:{A:22.1,B:20.4,C:25.2},65:{A:23.6,B:21.6,C:26.9},70:{A:25.2,B:22.8,C:28.6},75:{A:26.7,B:24.0,C:30.3},80:{A:28.3,B:25.2,C:32.0}};
+const MW={1:[0,1.00],2:[1.6,1.04],4:[2.8,1.07],6:[4.3,1.12],8:[5.8,1.17],10:[7.3,1.22],12:[8.8,1.27],14:[10.4,1.32],16:[11.9,1.36],18:[13.4,1.41],20:[14.9,1.46],22:[16.4,1.51]};
+const GT={"G1A":[2.0,"Tomar fácil (aislado)"],"G1B":[3.5,"Tomar borde (plano en superficie)"],"G1C1":[7.3,"Tomar cilíndrico Ø>12mm"],"G1C2":[8.7,"Tomar cilíndrico Ø 6-12mm"],"G1C3":[10.8,"Tomar cilíndrico Ø<6mm"],"G2":[5.6,"Retomar (reposicionar dedos)"],"G3":[5.6,"Transferir (mano a mano)"],"G4A":[7.3,"Seleccionar >25mm"],"G4B":[9.1,"Seleccionar 6-25mm"],"G4C":[12.9,"Seleccionar <6mm"],"G5":[0.0,"Contacto (toque simple)"]};
+const PT={"P1":{"S":{"E":5.6,"D":11.2},"SS":{"E":9.1,"D":14.7},"NS":{"E":10.4,"D":16.0}},"P2":{"S":{"E":16.2,"D":21.8},"SS":{"E":19.7,"D":25.3},"NS":{"E":21.0,"D":26.6}},"P3":{"S":{"E":43.0,"D":48.6},"SS":{"E":46.5,"D":52.1},"NS":{"E":47.8,"D":53.4}}};
+const TT={30:{S:2.8,M:4.4,L:8.4},45:{S:3.5,M:5.5,L:10.5},60:{S:4.1,M:6.5,L:12.3},75:{S:4.8,M:7.5,L:14.4},90:{S:5.4,M:8.5,L:16.2},105:{S:6.1,M:9.6,L:18.3},120:{S:6.8,M:10.6,L:20.4},135:{S:7.4,M:11.6,L:22.2},150:{S:8.1,M:12.7,L:24.3},165:{S:8.7,M:13.7,L:26.1},180:{S:9.4,M:14.8,L:28.2}};
+const DT={"D1":{"E":4.0,"D":5.7},"D2":{"E":7.5,"D":11.8},"D3":{"E":22.9,"D":34.7}};
+const BM={FM:8.5,FMP:19.1,TBC1:18.6,TBC2:37.2,SS_C1:17.0,SS_C2:34.1,KOK:29.0,AKOK:31.9,KBK:69.4,AKBK:76.7,SIT:34.7,STD:43.4,WP:15.0,WPO:17.0,EF:7.3,APA:10.6,APB:16.2};
+const UA={AA:[20,35,50],AB:[30,45,60],AC:[40,55,70],AD:[20,45,60],AE:[30,55,70],AF:[40,65,80],AG:[40,65,80],AH:[25,45,55],AJ:[40,65,75],AK:[50,75,85],AL:[80,105,115],AM:[95,120,130],AN:[120,145,160]};
+const UAD={AA:"<=1kg, tomar fácil, colocar aprox.",AB:"<=1kg, tomar fácil, colocar suelto",AC:"<=1kg, tomar fácil, colocar firme",AD:"<=1kg, tomar difícil, colocar aprox.",AE:"<=1kg, tomar difícil, colocar suelto",AF:"<=1kg, tomar difícil, colocar firme",AG:"<=1kg, puñado, colocar aprox.",AH:"1-8kg, colocar aprox.",AJ:"1-8kg, colocar suelto",AK:"1-8kg, colocar firme",AL:"8-22kg, colocar aprox.",AM:"8-22kg, colocar suelto",AN:"8-22kg, colocar firme"};
+const UP={PA:[10,20,25],PB:[20,30,35],PC:[30,40,45]};
+const UH={HA:[25,45,65],HB:[40,60,75],HC:[50,70,85]};
+const UB={BA:[10,25,40],BB:[30,45,60]};
+const UC={ZA:[5,15,20],ZB:[10,30,40],ZC:[30,45,55],ZD:[20,20,20]};
+
+function interp(d,tbl){
+  const keys=Object.keys(tbl).map(Number).sort((a,b)=>a-b);
+  if(tbl[d]) return tbl[d];
+  const lo=keys.filter(k=>k<=d).pop();
+  const hi=keys.find(k=>k>d);
+  if(lo===undefined) return tbl[keys[0]];
+  if(hi===undefined) return tbl[keys[keys.length-1]];
+  const r=(d-lo)/(hi-lo);
+  const lv=tbl[lo],hv=tbl[hi];
+  const res={};
+  for(const k in lv) res[k]=Math.round((lv[k]+r*(hv[k]-lv[k]))*10)/10;
+  return res;
+}
+function cR(d,c){const v=interp(d,RT);return v[c]||v['B'];}
+function cM(d,c,w=0){
+  const v=interp(d,MT);
+  const base=v[c]||v['B'];
+  if(w>1){
+    const wks=Object.keys(MW).map(Number).sort((a,b)=>a-b);
+    const wk=wks.reduce((p,k)=>Math.abs(k-w)<Math.abs(p-w)?k:p,wks[0]);
+    const[cs,fd]=MW[wk];
+    return Math.round((cs+base*fd)*10)/10;
+  }
+  return base;
+}
+function cG(code){return(GT[code]||GT['G1A'])[0];}
+function cP(cl,sy='S',mn='E'){return(PT[cl]||PT['P1'])[sy][mn];}
+function cT(ang,res='S'){const k=Object.keys(TT).map(Number).reduce((p,c)=>Math.abs(c-ang)<Math.abs(p-ang)?c:p,90);return TT[k][res];}
+function cD(cl,mn='E'){return(DT[cl]||DT['D1'])[mn];}
+function uasFaixa(d){return d<=20?1:d<=50?2:3;}
+function cUAS(code,d=20){
+  const fi=uasFaixa(d)-1;
+  for(const tbl of[UA,UP,UH,UB,UC]) if(tbl[code]) return tbl[code][fi];
+  return 0;
+}
+function r1(n){return Math.round(n*10)/10;}
+function r2(n){return Math.round(n*100)/100;}
+
+// ═══════════════════════════════════════════════════════════════
+// NLP — PATRONES DE VERBOS EN ESPAÑOL
+// ═══════════════════════════════════════════════════════════════
+const VP={
+  PEGAR:/\b(tom[ae]r?|tomando|tome|agarr[ae]r?|agarrando|agarre|cog[ae]r?|cogiendo|recog[ae]r?|recogiendo|sac[ae]r?|sacando|retir[ae]r?|retirando|quit[ae]r?|quitando|extraer?|extrayendo|buscar?|buscando|jal[ae]r?|jalando|captur[ae]r?|capturando|obten[ei]r?|obteniendo|obtener?)\b/gi,
+  COLOCAR:/\b(coloc[ae]r?|colocando|coloque?|deposit[ae]r?|depositando|pon[ei]r?|poniendo|ubic[ae]r?|ubicando|insert[ae]r?|insertando|soltar?|soltando|dej[ae]r?|dejando|empuj[ae]r?|empujando|posicion[ae]r?|posicionando|meter?|metiendo)\b/gi,
+  ESCANEAR:/\b(escane[ae]r?|escaneando|escanee|bip[ae]r?|bipando|bipe|leer?|leyendo|lea|scan|pistola.?rf|c[oó]digo.?de.?barras|c[oó]digo.?qr|lector|colector|pasar? por (lector|scanner|pistola)|pistola de lectura)\b/gi,
+  ANDAR:/\b(camin[ae]r?|caminando|camine|desplaz[ae]r?se|desplazando|desplazarse|traslad[ae]r?se|trasladando|mov[ae]r?se|movi[eé]ndose|ir? a|ir? hacia|ir? hasta|andar?|andando|ande|dirigirse)\b/gi,
+  VERIFICAR:/\b(verific[ae]r?|verificando|verifique|cheque[ae]r?|chequeando|revis[ae]r?|revisando|revise|inspeccion[ae]r?|inspeccionando|observ[ae]r?|observando|comprobar?|comprobando|mir[ae]r?|mirando|constatar?|valid[ae]r?|validando)\b/gi,
+  AGACHAR:/\b(agach[ae]r?se|agachando|bajar?se|bajando|flexion[ae]r?|flexionando|inclin[ae]r?se|inclinando|estante bajo|nivel bajo|\bsuelo\b|\bpiso\b|altura baja)\b/gi,
+  ABRIR:/\b(abrir?|abre|abra|abriendo|rasg[ae]r?|rasgando|cort[ae]r? (cinta|sello|embalaje)|desembal[ae]r?|destap[ae]r?|quitar embalaje|apertura)\b/gi,
+  FECHAR:/\b(cerr[ae]r?|cerrando|cierre|lacr[ae]r?|lacrando|lacre|sell[ae]r?|sellando|selle|tap[ae]r?|tapando|tape|vedar?|vedando|cerrar caja|cerrar embalaje|cerrar paquete)\b/gi,
+  ETIQUETAR:/\b(etiquet[ae]r?|etiquetando|etiquete|peg[ae]r? etiqueta|pegando etiqueta|aplic[ae]r? etiqueta|aplicando etiqueta|colocar etiqueta|etiqueta de (env[ií]o|despacho|romaneio))\b/gi,
+  PESAR:/\b(pes[ae]r?|pesando|pese|pesaje|aferir? peso|verificar? peso|b[aá]scula|balanza|colocar en (la )?b[aá]scula)\b/gi,
+  GIRAR:/\b(gir[ae]r?|girando|gire|rotar?|rotando|rote|volte[ae]r?|volteando|torcer?|torciendo|orient[ae]r?|orientando|rotacion[ae]r?)\b/gi,
+  PRESSIONAR:/\b(apret[ae]r?|apretando|apriete|presion[ae]r?|presionando|presione|accion[ae]r?|accionando|accione|puls[ae]r?|pulsando|clicar?|clicando|bot[oó]n)\b/gi,
+  DOBRAR:/\b(arm[ae]r? caja|armando caja|doblar? caja|doblando caja|mont[ae]r? caja|montando caja|pleg[ae]r?|plegando)\b/gi,
+  SEPARAR:/\b(separ[ae]r?|separando|separe|selecci?on[ae]r?|seleccionando|clasific[ae]r?|clasificando|divid[ei]r?|dividiendo|pick(ing)?|segreg[ae]r?)\b/gi,
+  INS_DOC:/\b(insert[ae]r? (nota|documento|papel|factura|invoice)|colocar (nota|documento|factura)|incluir (nota|documento)|poner (nota|factura) (en|dentro))\b/gi,
+};
+
+function extractDist(s){
+  const m=s.match(/(\d+[\.,]?\d*)\s*cm\b/i);if(m) return parseFloat(m[1].replace(',','.'));
+  const m2=s.match(/(\d+[\.,]?\d*)\s*metro[s]?\b|(\d+[\.,]?\d*)\s*m\b/i);
+  if(m2) return parseFloat((m2[1]||m2[2]).replace(',','.'))*100;
+  const words={cerca:15,'al lado':18,adyacente:18,'al frente':25,'en frente':25,frente:25,banda:30,correa:30,lateral:35,'al costado':35,lejos:55,distante:55,'otro lado':60,estirado:65};
+  for(const[w,d] of Object.entries(words)) if(s.toLowerCase().includes(w)) return d;
+  return null;
+}
+function extractWeight(s){
+  const m=s.match(/(\d+[\.,]?\d*)\s*kg\b/i);if(m) return parseFloat(m[1].replace(',','.'));
+  const m2=s.match(/(\d+[\.,]?\d*)\s*g\b(?!b)/i);if(m2) return parseFloat(m2[1].replace(',','.'))/1000;
+  const words={liviano:0.3,ligero:0.3,'muy ligero':0.2,pesado:6.0,pesada:6.0,'muy pesado':12.0,voluminoso:5.0,mediano:2.0};
+  for(const[w,v] of Object.entries(words)) if(s.toLowerCase().includes(w)) return v;
+  return 0;
+}
+function extractPrecision(s){
+  const sl=s.toLowerCase();
+  if(/firme|precis[oa]|exacto|encaje|ajustado|apretado/.test(sl)) return 'P2';
+  if(/muy precis[oa]|muy firme|tolerancia m[ií]nima/.test(sl)) return 'P3';
+  return 'P1';
+}
+function extractGraspType(s,objType){
+  const sl=s.toLowerCase();
+  if(/entre (semejantes|otros|varios)|mezclad[oa]|pila|conjunto/.test(sl)) return 'G4A';
+  if(/pequeño|minúsculo|fino|delicado/.test(sl)) return 'G1C2';
+  if(/cilíndrico|tubular|botella|frasco|tubo/.test(sl)) return 'G1C1';
+  if(/plano|etiqueta|papel|documento|hoja|tarjeta/.test(sl)) return 'G1B';
+  if(/ala|borde/.test(sl)) return 'G2';
+  if(objType==='label') return 'G1B';
+  if(objType==='doc') return 'G1B';
+  if(objType==='box') return 'G4A';
+  return 'G1A';
+}
+function extractLevel(s){
+  const sl=s.toLowerCase();
+  if(/estante bajo|nivel bajo|altura baja|\bsuelo\b|\bpiso\b|fondo de|inferior|abajo/.test(sl)) return 'low';
+  if(/estante alto|arriba|alto|superior|elevad/.test(sl)) return 'high';
+  return 'normal';
+}
+function extractSteps(s){
+  const m=s.match(/(\d+)\s*(pasos?|steps?)/i);if(m) return parseInt(m[1]);
+  const m2=s.match(/(\d+[\.,]?\d*)\s*(metros?|m)\b/i);if(m2) return Math.round(parseFloat(m2[1].replace(',','.'))/0.75);
+  return null;
+}
+function extractMeters(s){
+  const m=s.match(/(\d+[\.,]?\d*)\s*(metros?|m)\b/i);if(m) return parseFloat(m[1].replace(',','.'));
+  const m2=s.match(/(\d+)\s*(pasos?)/i);if(m2) return Math.round(parseInt(m2[1])*0.75);
+  return null;
+}
+function extractObjType(s){
+  const sl=s.toLowerCase();
+  if(/etiqueta|label/.test(sl)) return 'label';
+  if(/nota|factura|invoice|documento|papel/.test(sl)) return 'doc';
+  if(/caja|box|embalaje/.test(sl)) return 'box';
+  if(/scanner|lector|pistola/.test(sl)) return 'scanner';
+  if(/bolsa|bag/.test(sl)) return 'bag';
+  return 'product';
+}
+function extractAngle(s){
+  const m=s.match(/(\d+)\s*[°º]/);if(m) return parseInt(m[1]);
+  if(/media vuelta|180/.test(s)) return 180;
+  if(/cuarto de vuelta|90/.test(s)) return 90;
+  return 90;
+}
+function hasTape(s){return /cinta|cinta adhesiva|tape|lacre|sellado con/.test(s.toLowerCase());}
+
+function splitSentences(text){
+  let t=text.replace(/\r\n/g,'\n');
+  const lines=t.split('\n').map(l=>l.trim()).filter(l=>l.length>2);
+  const result=[];
+  for(const line of lines){
+    const parts=line.split(/[;]|(?:,?\s*)(?:después|luego|a continuación|entonces|por último|finalmente|posteriormente)(?:\s*,?\s*)/i);
+    for(const p of parts){
+      const clean=p.replace(/^[\d]+[\.\)]\s*/,'').replace(/^[-•*]\s*/,'').trim();
+      if(clean.length>3) result.push(clean);
+    }
+  }
+  return result.length>0?result:[text.trim()];
+}
+
+function detectVerbs(s){
+  const found=[];
+  for(const[name,re] of Object.entries(VP)){
+    re.lastIndex=0;
+    if(re.test(s)) found.push(name);
+    re.lastIndex=0;
+  }
+  return found;
+}
+
+function mkEl(code,tmu,desc,type,va,reason){return{code,tmu:r1(tmu),desc,type,va,reason};}
+
+function tplPegarColocar(ctx){
+  const d1=ctx.distPick||25, d2=ctx.distPlace||d1+5, w=ctx.weight||0;
+  const gc=ctx.graspCode||'G1A', pc=ctx.precision||'P1', ps=ctx.sym||'S', pm=ctx.han||'E';
+  const els=[];
+  if(ctx.lowLevel){
+    els.push(mkEl('KOK',BM.KOK,'Agachar (nivel bajo)','corpo',false,`Objeto en nivel bajo (${ctx.levelWord||'estante bajo'})`));
+  }
+  const dReason=ctx.distEstimated?`Distancia estimada ~${d1}cm (no especificada)`:`Distancia detectada: ${d1}cm`;
+  const rcaseNote=gc==='G4A'||gc==='G4B'?'C':'B';
+  els.push(mkEl(`R${d1}${rcaseNote}`,cR(d1,rcaseNote),`Alcanzar (${d1}cm)`,'transporte',false,dReason+` — objeto ${rcaseNote==='C'?'entre semejantes':'aislado'}`));
+  els.push(mkEl(gc,cG(gc),GT[gc][1],'pegar',false,ctx.graspReason||'Tipo de toma determinado por el objeto'));
+  const mCase=pc==='P3'?'C':pc==='P2'?'C':'B';
+  const mDesc=w>0?`Mover (${d2}cm, ${w}kg)`:`Mover (${d2}cm)`;
+  els.push(mkEl(`M${d2}${mCase}`,cM(d2,mCase,w),mDesc,'transporte',true,`Transportar al destino — precisión ${pc}`+(w>0?`, peso ${w}kg`:'')));
+  if(pc!=='P1'||ps!=='S'){
+    els.push(mkEl(`${pc}${ps}${pm}`,cP(pc,ps,pm),`Posicionar ${pc} (${ps}/${pm})`,'posicionar',true,`Precisión ${pc}: ${pc==='P1'?'suelto (tol > ±1,5mm)':pc==='P2'?'ajustado (tol ±0,4–1,5mm)':'firme (tol < ±0,4mm)'}`));
+  } else {
+    els.push(mkEl('P1SE',cP('P1','S','E'),'Posicionar suelto','posicionar',true,'Posicionamiento simple, tolerancia amplia'));
+  }
+  els.push(mkEl('RL1',2.0,'Soltar','posicionar',false,'Abrir dedos para liberar el objeto'));
+  if(ctx.lowLevel){
+    els.push(mkEl('AKOK',BM.AKOK,'Levantar (post-agachar)','corpo',false,'Retornar posición erguida'));
+  }
+  return els;
+}
+
+function tplEscanear(ctx){
+  const d=ctx.distPick||20;
+  return[
+    mkEl(`R${d}B`,cR(d,'B'),`Alcanzar scanner/producto (${d}cm)`,'transporte',false,'Alcanzar colector RF o producto para escanear'),
+    mkEl('G1A',2.0,'Tomar scanner','pegar',false,'Colector aislado — G1A'),
+    mkEl('M15B',cM(15,'B'),'Orientar para lectura','transporte',true,'Mover frente al código'),
+    mkEl('APA',BM.APA,'Presionar gatillo','pressao',true,'Accionar gatillo del colector RF'),
+    mkEl('RL1',2.0,'Soltar','posicionar',false,'Soltar tras lectura confirmada'),
+  ];
+}
+
+function tplAndar(ctx){
+  const els=[];
+  const pasos=ctx.steps||5;
+  const metros=ctx.meters||Math.round(pasos*0.75*10)/10;
+  const obs=ctx.obstructed||false;
+  els.push(mkEl(`W-P×${pasos}`,pasos*(obs?17:15),`Caminar ${pasos} pasos (~${metros}m)`,'corpo',false,ctx.distReason||`Estimado: ~${metros}m (${pasos} pasos)`+(obs?' — obstruido/carga':'')));
+  if(ctx.needTurn) els.push(mkEl('TBC1',BM.TBC1,'Giro de cuerpo (dirección)','corpo',false,'Cambio de dirección al llegar al destino'));
+  return els;
+}
+
+function tplVerificar(ctx){
+  if(ctx.detailed){
+    return[
+      mkEl('ET',15.2,'Mover ojos (desplazar visión)','visual',true,'Desplazar foco al producto/pantalla'),
+      mkEl('EF',BM.EF,'Enfocar (verificar)','visual',true,'Foco visual para verificación'),
+    ];
+  }
+  return[mkEl('EF',BM.EF,'Verificar visualmente','visual',true,'Foco visual rápido')];
+}
+
+function tplAbrirCaixa(ctx){
+  const els=[];
+  if(hasTape(ctx.sentence||'')){
+    els.push(mkEl('R15B',cR(15,'B'),'Alcanzar cinta','transporte',false,'Caja sellada — alcanzar cinta'));
+    els.push(mkEl('G1B',3.5,'Tomar cinta (borde)','pegar',false,'Cinta adhesiva — borde fino'));
+    els.push(mkEl('T90S',cT(90,'S'),'Jalar/torcer cinta','transporte',true,'Quitar cinta con torsión'));
+    els.push(mkEl('RL1',2.0,'Soltar cinta','posicionar',false,'Desechar cinta'));
+  }
+  els.push(mkEl('R20B',cR(20,'B'),'Alcanzar ala 1','transporte',false,'Primera ala de la caja'));
+  els.push(mkEl('G2',5.6,'Retomar ala','pegar',false,'Tomar ala para jalar'));
+  els.push(mkEl('M15C',cM(15,'C'),'Abrir ala 1','transporte',true,'Jalar ala para abrir'));
+  els.push(mkEl('D1E',cD('D1','E'),'Separar ala 1','posicionar',true,'Desencajar ala'));
+  els.push(mkEl('R20B',cR(20,'B'),'Alcanzar ala 2','transporte',false,'Segunda ala'));
+  els.push(mkEl('G2',5.6,'Retomar ala 2','pegar',false,'Segunda ala'));
+  els.push(mkEl('M15C',cM(15,'C'),'Abrir ala 2','transporte',true,'Jalar segunda ala'));
+  els.push(mkEl('D1E',cD('D1','E'),'Separar ala 2','posicionar',true,'Desencajar segunda ala'));
+  return els;
+}
+
+function tplFecharCaixa(ctx){
+  return[
+    mkEl('R20B',cR(20,'B'),'Alcanzar ala 1','transporte',false,'Primera ala para cerrar'),
+    mkEl('G2',5.6,'Tomar ala 1','pegar',false,'Ala de la caja'),
+    mkEl('M20C',cM(20,'C'),'Doblar ala 1','transporte',true,'Doblar para cerrar'),
+    mkEl('RL1',2.0,'Soltar ala 1','posicionar',false,'Soltar tras doblar'),
+    mkEl('R20B',cR(20,'B'),'Alcanzar ala 2','transporte',false,'Segunda ala'),
+    mkEl('G2',5.6,'Tomar ala 2','pegar',false,'Segunda ala'),
+    mkEl('M20C',cM(20,'C'),'Doblar ala 2','transporte',true,'Doblar segunda ala'),
+    mkEl('RL1',2.0,'Soltar ala 2','posicionar',false,'Soltar tras doblar'),
+    mkEl('APA',BM.APA,'Presionar para sellar','pressao',true,'Presionar alas para vedar'),
+  ];
+}
+
+function tplEtiquetar(ctx){
+  const d=ctx.distPick||20;
+  return[
+    mkEl(`R${d}B`,cR(d,'B'),`Alcanzar etiqueta (${d}cm)`,'transporte',false,'Alcanzar etiqueta en impresora o rollo'),
+    mkEl('G1B',3.5,'Tomar etiqueta (borde)','pegar',false,'Etiqueta plana en superficie — G1B'),
+    mkEl('M15B',cM(15,'B'),'Mover al producto','transporte',true,'Transportar etiqueta al producto'),
+    mkEl('P2SSE',cP('P2','SS','E'),'Posicionar etiqueta (P2)','posicionar',true,'Etiqueta requiere posicionamiento preciso'),
+    mkEl('APA',BM.APA,'Presionar etiqueta','pressao',true,'Adherir completamente'),
+    mkEl('RL2',0.0,'Soltar (contacto)','posicionar',false,'Eliminación de contacto'),
+  ];
+}
+
+function tplPesar(ctx){
+  const w=ctx.weight||0.5;
+  return[
+    mkEl('R25B',cR(25,'B'),'Alcanzar producto','transporte',false,'Alcanzar producto para pesar'),
+    mkEl('G1A',2.0,'Tomar producto','pegar',false,'Producto aislado'),
+    mkEl('M25B',cM(25,'B',w),`Mover a la báscula (${w||0.5}kg)`,'transporte',true,'Transportar a la báscula'),
+    mkEl('P1SE',cP('P1','S','E'),'Posicionar en báscula','posicionar',true,'Centrar en la báscula'),
+    mkEl('RL1',2.0,'Soltar en báscula','posicionar',false,'Soltar para medición'),
+    mkEl('EF',BM.EF,'Leer display','visual',true,'Verificar valor en pantalla'),
+    mkEl('R25B',cR(25,'B'),'Alcanzar (de la báscula)','transporte',false,'Retirar producto'),
+    mkEl('G1A',2.0,'Tomar (de la báscula)','pegar',false,'Tomar producto pesado'),
+    mkEl('M25B',cM(25,'B',w),'Retirar de la báscula','transporte',true,'Mover al destino'),
+    mkEl('RL1',2.0,'Soltar producto','posicionar',false,'Depositar'),
+  ];
+}
+
+function tplGirar(ctx){
+  const ang=ctx.angle||90, res=ctx.resistance||'S';
+  return[
+    mkEl('R10B',cR(10,'B'),'Alcanzar para girar','transporte',false,'Alcanzar objeto para rotar'),
+    mkEl('G1C1',7.3,'Tomar (cilíndrico)','pegar',false,'G1C1 para girar objeto cilíndrico'),
+    mkEl(`T${ang}${res}`,cT(ang,res),`Torcer ${ang}° (res. ${res})`,'transporte',true,`Rotación de ${ang}°`),
+    mkEl('RL1',2.0,'Soltar','posicionar',false,'Soltar tras rotación'),
+  ];
+}
+
+function tplPressionar(ctx){
+  return[
+    mkEl('R15A',cR(15,'A'),'Alcanzar botón (fijo)','transporte',false,'Botón en posición fija — caso A'),
+    mkEl('APA',BM.APA,'Presionar botón','pressao',true,'Accionar con fuerza'),
+    mkEl('RL2',0.0,'Soltar (contacto)','posicionar',false,'Eliminar contacto'),
+  ];
+}
+
+function tplDobrarCaixa(ctx){
+  return[
+    mkEl('R30B',cR(30,'B'),'Alcanzar caja planificada','transporte',false,'Buscar caja en la pila'),
+    mkEl('G4A',7.3,'Tomar caja (seleccionando)','pegar',false,'Caja entre otras — G4A'),
+    mkEl('M30B',cM(30,'B'),'Mover al área de armado','transporte',false,'Posicionar para armar'),
+    mkEl('RL1',2.0,'Soltar','posicionar',false,'Soltar para armar'),
+    mkEl('R20B',cR(20,'B'),'Alcanzar ala 1','transporte',false,'Primera ala'),
+    mkEl('G2',5.6,'Tomar ala','pegar',false,'Ala de la caja'),
+    mkEl('M15C',cM(15,'C'),'Doblar ala 1','transporte',true,'Armar primera ala'),
+    mkEl('RL1',2.0,'Soltar','posicionar',false,''),
+    mkEl('R20B',cR(20,'B'),'Alcanzar ala 2','transporte',false,''),
+    mkEl('G2',5.6,'Tomar ala 2','pegar',false,''),
+    mkEl('M15C',cM(15,'C'),'Doblar ala 2','transporte',true,'Segunda ala'),
+    mkEl('RL1',2.0,'Soltar','posicionar',false,''),
+  ];
+}
+
+function tplSeparar(ctx){
+  const d=ctx.distPick||30, w=ctx.weight||0.5;
+  return[
+    mkEl(`R${d}C`,cR(d,'C'),`Alcanzar (${d}cm, entre semejantes)`,'transporte',false,'Objeto entre semejantes — caso C'),
+    mkEl('G4A',7.3,'Tomar seleccionando','pegar',false,'Seleccionar producto — G4A (>25mm)'),
+    mkEl(`M${d}B`,cM(d,'B',w),`Mover producto (${d}cm)`,'transporte',true,'Mover producto separado'),
+    mkEl('P1SE',cP('P1','S','E'),'Posicionar','posicionar',true,''),
+    mkEl('RL1',2.0,'Soltar','posicionar',false,''),
+  ];
+}
+
+function tplInsDoc(ctx){
+  return[
+    mkEl('R25B',cR(25,'B'),'Alcanzar documento','transporte',false,'Alcanzar nota fiscal/documento'),
+    mkEl('G1B',3.5,'Tomar documento (plano)','pegar',false,'Documento plano — G1B'),
+    mkEl('M20B',cM(20,'B'),'Insertar en el paquete','transporte',true,'Mover documento hacia adentro'),
+    mkEl('P1SSE',cP('P1','SS','E'),'Posicionar documento','posicionar',true,'Dentro de la caja (semisimétrico)'),
+    mkEl('RL1',2.0,'Soltar','posicionar',false,''),
+  ];
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN ANALYZER
+// ═══════════════════════════════════════════════════════════════
+let currentAnalysis=null;
+let currentPFD='leve';
+const PFD_VALS={leve:0.15,moderada:0.20,pesada:0.25,frio:0.25};
+
+function analyzeProcess(text,pfdType){
+  const sentences=splitSentences(text);
+  const activities=[];
+  for(const sent of sentences){
+    const verbs=detectVerbs(sent);
+    if(verbs.length===0) continue;
+    const dist=extractDist(sent);
+    const weight=extractWeight(sent);
+    const level=extractLevel(sent);
+    const prec=extractPrecision(sent);
+    const objType=extractObjType(sent);
+    const graspCode=extractGraspType(sent,objType);
+    const angle=extractAngle(sent);
+    const steps=extractSteps(sent);
+    const meters=extractMeters(sent);
+    const distEstimated=dist===null;
+    const ctx={
+      distPick:dist||25, distPlace:dist?(dist+5):30, weight,
+      lowLevel:level==='low', levelWord:level,
+      precision:prec, graspCode, graspReason:`${objType} — ${GT[graspCode][1]}`,
+      sym:'S', han:'E', distEstimated,
+      distReason:distEstimated?`Distancia estimada (no especificada en texto)`:`Detectado: ${dist}cm`,
+      objType, angle, steps, meters,
+      sentence:sent,
+      obstructed:weight>15||/obstruido|carga pesada/.test(sent.toLowerCase()),
+      needTurn:/vuelta|retorna|gira (hacia|al) (otro|nuevo)/.test(sent.toLowerCase()),
+      detailed:/detallado|minucioso|completo/.test(sent.toLowerCase()),
+    };
+    ctx.graspDifficult=(graspCode==='G1B'||graspCode==='G4A'||graspCode==='G4B'||graspCode==='G4C'||graspCode==='G1C1'||graspCode==='G1C2'||graspCode==='G1C3');
+    const usedVerbs=new Set();
+    const matchedTemplates=[];
+    const templatePriority=[
+      {v:'ESCANEAR',fn:tplEscanear,name:'Escanear Código'},
+      {v:'PESAR',fn:tplPesar,name:'Pesar Producto'},
+      {v:'ETIQUETAR',fn:tplEtiquetar,name:'Etiquetar'},
+      {v:'DOBRAR',fn:tplDobrarCaixa,name:'Armar Caja'},
+      {v:'ABRIR',fn:tplAbrirCaixa,name:'Abrir Caja/Embalaje'},
+      {v:'FECHAR',fn:tplFecharCaixa,name:'Cerrar/Sellar Caja'},
+      {v:'GIRAR',fn:tplGirar,name:'Girar/Torcer'},
+      {v:'PRESSIONAR',fn:tplPressionar,name:'Accionar Botón'},
+      {v:'INS_DOC',fn:tplInsDoc,name:'Insertar Documento'},
+      {v:'SEPARAR',fn:tplSeparar,name:'Separar Producto'},
+      {v:'VERIFICAR',fn:tplVerificar,name:'Verificación Visual'},
+      {v:'ANDAR',fn:tplAndar,name:'Caminar'},
+      {v:'AGACHAR',fn:null,name:'Agachar'},
+    ];
+    if(verbs.includes('AGACHAR')){ctx.lowLevel=true;usedVerbs.add('AGACHAR');}
+    for(const tp of templatePriority){
+      if(tp.fn&&verbs.includes(tp.v)&&!usedVerbs.has(tp.v)){
+        usedVerbs.add(tp.v);
+        const els=tp.fn(ctx);
+        matchedTemplates.push({name:tp.name,verb:tp.v,elements:els});
+      }
+    }
+    const hasPick=verbs.includes('PEGAR')&&!usedVerbs.has('PEGAR');
+    const hasPlace=verbs.includes('COLOCAR')&&!usedVerbs.has('COLOCAR');
+    if(hasPick||hasPlace){
+      const name=hasPick&&hasPlace?'Tomar y Colocar':hasPick?'Tomar':'Colocar';
+      if(!hasPlace) ctx.distPlace=null;
+      const els=tplPegarColocar(ctx);
+      if(!hasPlace){
+        const reduced=els.filter(e=>!['P1SE','RL1'].includes(e.code)||(e.code==='RL1'));
+        matchedTemplates.push({name,verb:'PEGAR',elements:reduced});
+      } else {
+        matchedTemplates.push({name,verb:'PEGAR+COLOCAR',elements:els});
+      }
+      if(hasPick) usedVerbs.add('PEGAR');
+      if(hasPlace) usedVerbs.add('COLOCAR');
+    }
+    if(matchedTemplates.length>0){
+      activities.push({sentence:sent,verbs,ctx,templates:matchedTemplates,elements:matchedTemplates.flatMap(t=>t.elements),uasElements:mapToUAS(matchedTemplates,ctx)});
+    }
+  }
+  const allMTM1=[];
+  const allUAS=[];
+  let seq=1;
+  for(const act of activities){
+    for(const el of act.elements) allMTM1.push({...el,seq:seq++,activity:act.sentence.substring(0,40)});
+    for(const el of act.uasElements) allUAS.push({...el,activity:act.sentence.substring(0,40)});
+  }
+  return{activities,mtm1:allMTM1,uas:allUAS,kpisMTM1:calcKPIs(allMTM1,pfdType),kpisUAS:calcKPIs(allUAS,pfdType),gaps:gapAnalysis(activities,allMTM1,text),pfdType};
+}
+
+function mapToUAS(templates,ctx){
+  const result=[];
+  const dist=ctx.distPlace||ctx.distPick||25;
+  const faixa=uasFaixa(dist);
+  const w=ctx.weight||0;
+  for(const t of templates){
+    switch(t.verb){
+      case 'ESCANEAR':
+        result.push({code:'AA',tmu:cUAS('AA',20),faixa:1,dist:20,desc:'Tomar scanner (<=1kg, fácil, aprox.)',reason:'Scanner liviano',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'BA',tmu:cUAS('BA',10),faixa:1,dist:10,desc:'Accionar gatillo',reason:'Presionar gatillo del scanner',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'PESAR':
+        {const pc=w<=1?'AB':w<=8?'AJ':'AM';
+        result.push({code:pc,tmu:cUAS(pc,25),faixa,dist:25,desc:`${UAD[pc]} (colocar báscula)`,reason:`${w||0.5}kg`,activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'VA',tmu:15,faixa:null,dist:0,desc:'Control visual (display)',reason:'Leer peso',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:pc,tmu:cUAS(pc,25),faixa,dist:25,desc:`${UAD[pc]} (retirar báscula)`,reason:'Tras pesaje',activity:ctx.sentence?.substring(0,30)});
+        break;}
+      case 'ETIQUETAR':
+        result.push({code:'AE',tmu:cUAS('AE',dist),faixa,dist,desc:'Tomar etiqueta (difícil, suelto)',reason:'Etiqueta plana — tomar borde',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'BA',tmu:cUAS('BA',10),faixa:1,dist:10,desc:'Presionar etiqueta',reason:'Adherir etiqueta',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'ABRIR':
+        result.push({code:'HA',tmu:cUAS('HA',20),faixa:1,dist:20,desc:'Manipular ala 1 (aprox)',reason:'Abrir caja',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'HA',tmu:cUAS('HA',20),faixa:1,dist:20,desc:'Manipular ala 2 (aprox)',reason:'Segunda ala',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'FECHAR':
+        result.push({code:'HB',tmu:cUAS('HB',20),faixa:1,dist:20,desc:'Manipular ala 1 (suelto)',reason:'Cerrar caja',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'HB',tmu:cUAS('HB',20),faixa:1,dist:20,desc:'Manipular ala 2 (suelto)',reason:'Segunda ala',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'BA',tmu:cUAS('BA',10),faixa:1,dist:10,desc:'Presionar para vedar',reason:'Sellar',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'DOBRAR':
+        result.push({code:'AG',tmu:cUAS('AG',30),faixa:2,dist:30,desc:'Tomar caja planificada',reason:'Caja de pila',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'HA',tmu:cUAS('HA',20),faixa:1,dist:20,desc:'Armar ala 1',reason:'Doblar ala',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:'HA',tmu:cUAS('HA',20),faixa:1,dist:20,desc:'Armar ala 2',reason:'Doblar ala 2',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'GIRAR':
+        result.push({code:'HC',tmu:cUAS('HC',15),faixa:1,dist:15,desc:'Manipulación con rotación (firme)',reason:'Girar objeto',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'PRESSIONAR':
+        result.push({code:'BA',tmu:cUAS('BA',15),faixa:1,dist:15,desc:'Accionamiento simple',reason:'Presionar botón',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'INS_DOC':
+        result.push({code:'AE',tmu:cUAS('AE',25),faixa,dist:25,desc:'Tomar documento (difícil)',reason:'Documento plano',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'SEPARAR':
+        {const sc=w<=1?'AD':w<=8?'AH':'AL';
+        result.push({code:sc,tmu:cUAS(sc,dist),faixa,dist,desc:UAD[sc],reason:'Separar producto',activity:ctx.sentence?.substring(0,30)});
+        break;}
+      case 'VERIFICAR':
+        result.push({code:'VA',tmu:15,faixa:null,dist:0,desc:'Control visual',reason:'Verificación visual',activity:ctx.sentence?.substring(0,30)});
+        break;
+      case 'ANDAR':
+        {const metros=ctx.meters||(ctx.steps||5)*0.75;
+        result.push({code:'KA',tmu:metros*25,faixa:null,dist:metros,desc:`Caminar ${Math.round(metros*10)/10}m (KA×${Math.round(metros*10)/10})`,reason:'Desplazamiento',activity:ctx.sentence?.substring(0,30)});
+        break;}
+      case 'PEGAR+COLOCAR':
+      case 'PEGAR':
+      case 'COLOCAR':
+        {let uc;
+        if(w<=1) uc=ctx.graspDifficult?(ctx.precision==='P1'?'AD':ctx.precision==='P2'?'AE':'AF'):(ctx.precision==='P1'?'AA':ctx.precision==='P2'?'AB':'AC');
+        else if(w<=8) uc=ctx.precision==='P1'?'AH':ctx.precision==='P2'?'AJ':'AK';
+        else uc=ctx.precision==='P1'?'AL':ctx.precision==='P2'?'AM':'AN';
+        if(ctx.lowLevel) result.push({code:'KB',tmu:60,faixa:null,dist:0,desc:'Agachar+Levantar',reason:'Nivel bajo',activity:ctx.sentence?.substring(0,30)});
+        result.push({code:uc,tmu:cUAS(uc,dist),faixa,dist,desc:UAD[uc],reason:`${w||0}kg, prec ${ctx.precision||'P1'}, Banda ${faixa} (${dist}cm)`,activity:ctx.sentence?.substring(0,30)});
+        break;}
+    }
+  }
+  return result;
+}
+
+function calcKPIs(elements,pfdType){
+  const pfd=PFD_VALS[pfdType]||0.15;
+  const total=elements.reduce((s,e)=>s+e.tmu,0);
+  const va=elements.filter(e=>e.va).reduce((s,e)=>s+e.tmu,0);
+  const tcaSec=r2(total*0.036);
+  const tcaNormal=r2(tcaSec*(1+pfd));
+  const uph=tcaNormal>0?r1(3600/tcaNormal):0;
+  return{total:r1(total),tcaSec,pfd:pfd*100,tcaNormal,uph,va:r1(va),vaPct:total>0?r1(va/total*100):0};
+}
+
+function gapAnalysis(activities,elements,rawText){
+  const gaps=[];
+  const text=rawText.toLowerCase();
+  const codes=elements.map(e=>e.code);
+  const hasVerb=v=>activities.some(a=>a.verbs.includes(v));
+  const hasMTM=code=>codes.some(c=>c.startsWith(code));
+  const isPicking=/separ|pick|recoger producto|tomar item|tomar producto/.test(text);
+  if(isPicking&&!hasVerb('ESCANEAR')){
+    gaps.push({level:'critical',icon:'📵',title:'Scan no identificado',desc:'Proceso de picking detectado sin escaneo.',suggestion:'Verifique: ¿el operador escanea el producto o posición? Agregue etapa de escaneo.'});
+  }
+  const estimated=activities.some(a=>a.ctx.distEstimated);
+  if(estimated){
+    gaps.push({level:'warning',icon:'📏',title:'Distancias estimadas',desc:'Algunas distancias no fueron especificadas y fueron estimadas (por defecto 25cm).',suggestion:'Mida e informe las distancias reales para mayor precisión.'});
+  }
+  if(hasVerb('ANDAR')&&activities.filter(a=>a.verbs.includes('ANDAR')).some(a=>!a.ctx.meters)){
+    gaps.push({level:'warning',icon:'🚶',title:'Distancia de caminata estimada',desc:'Caminata detectada pero distancia no especificada (estimado 5 pasos/~3,75m).',suggestion:'Informe la distancia real (ej: "caminar 5 metros hasta la banda").'});
+  }
+  const hasLowLevel=activities.some(a=>a.ctx.lowLevel);
+  if(hasLowLevel&&!hasMTM('KOK')&&!hasMTM('KB')){
+    gaps.push({level:'warning',icon:'🦵',title:'Nivel bajo sin KOK detectado',desc:'Objeto en nivel bajo pero sin elemento de agachar explícito.',suggestion:'Confirme si hay agachamiento — agregue "agachar" a la descripción si aplica.'});
+  }
+  const maxWeight=Math.max(...activities.map(a=>a.ctx.weight||0));
+  if(maxWeight>=10&&PFD_VALS[currentPFD]<0.20){
+    gaps.push({level:'warning',icon:'⚖️',title:'Peso elevado — PFD puede ser insuficiente',desc:`Peso detectado de ${maxWeight}kg. PFD actual: ${PFD_VALS[currentPFD]*100}%.`,suggestion:'Considere usar PFD "Moderado" (20%) o "Pesado" (25%) para cargas > 10kg.'});
+  }
+  if(hasVerb('ABRIR')&&!hasVerb('FECHAR')&&!/retorno|devoluci[oó]n|triaje/.test(text)){
+    gaps.push({level:'warning',icon:'📦',title:'Apertura sin cierre',desc:'Caja abierta detectada pero sin etapa de cierre/sellado.',suggestion:'Verifique si hay etapa de cerrar/sellar el embalaje.'});
+  }
+  if(/calidad|verificaci[oó]n|qc|inspecci[oó]n/.test(text)&&!hasVerb('VERIFICAR')){
+    gaps.push({level:'warning',icon:'👁️',title:'Control de calidad sin verificación visual explícita',desc:'Proceso de calidad/verificación sin elemento de control visual.',suggestion:'Agregue "verificar" o "revisar" a la etapa de control.'});
+  }
+  const walkActs=activities.filter(a=>a.verbs.includes('ANDAR'));
+  if(walkActs.length===1&&activities.length>2){
+    gaps.push({level:'info',icon:'↩️',title:'Retorno al puesto puede estar faltando',desc:'Solo una caminata detectada. Puede faltar caminata de retorno.',suggestion:'Si el operador va y vuelve (ej: buscar ítem, volver al puesto), agregue el retorno.'});
+  }
+  if(/expedici[oó]n|despacho|env[ií]o/.test(text)){
+    const checks=[
+      [!hasVerb('PESAR'),'⚖️','Pesaje','Proceso de despacho sin etapa de pesaje.','Agregue etapa de pesaje si aplica.','warning'],
+      [!hasVerb('ETIQUETAR'),'🏷️','Etiquetado','Proceso de despacho sin aplicación de etiqueta.','Agregue etapa de etiquetar si aplica.','warning'],
+      [!hasVerb('FECHAR'),'📦','Cierre de embalaje','Despacho sin cerrar embalaje.','Agregue etapa de cerrar caja.','info'],
+    ];
+    for(const[cond,icon,title,desc,sug,level] of checks) if(cond) gaps.push({level,icon,title,desc,suggestion:sug});
+  }
+  if(hasMTM('G2')&&elements.filter(e=>e.code==='G2').length>3){
+    gaps.push({level:'info',icon:'✋',title:'Múltiples reposicionamientos (G2)',desc:`${elements.filter(e=>e.code==='G2').length} ocurrencias de G2 (retomar). Puede indicar manejo no ergonómico.`,suggestion:'Analice si el layout puede reducir la necesidad de reposicionar objetos en los dedos.'});
+  }
+  if(gaps.filter(g=>g.level==='critical').length===0&&gaps.filter(g=>g.level==='warning').length===0){
+    gaps.push({level:'ok',icon:'✅',title:'Análisis sin inconsistencias críticas',desc:'Ningún gap crítico o aviso significativo encontrado.',suggestion:'Continúe refinando con distancias y pesos reales para mayor precisión.'});
+  }
+  return gaps;
+}
+
+const TYPE_CLASS={transporte:'bt',pegar:'bg',posicionar:'br',corpo:'bp',visual:'bv',pressao:'ba'};
+const TYPE_LABEL={transporte:'Transporte',pegar:'Tomar',posicionar:'Posicionar',corpo:'Cuerpo',visual:'Visual',pressao:'Presión'};
+
+function renderLog(activities){
+  if(!activities.length) return '<div class="empty"><div class="ico">🤔</div><p>Ninguna actividad reconocida</p></div>';
+  let html='';
+  for(const act of activities){
+    const totalTMU=act.elements.reduce((s,e)=>s+e.tmu,0);
+    html+=`<div class="acard">
+      <div class="at">📍 ${act.templates.map(t=>t.name).join(' + ')}</div>
+      <div class="as">"${act.sentence}"</div>
+      <div style="margin-bottom:5px">`;
+    for(const v of act.verbs) html+=`<span class="tag tv2">🔤 ${v}</span>`;
+    if(act.ctx.weight>0) html+=`<span class="tag tg2">⚖️ ${act.ctx.weight}kg</span>`;
+    if(act.ctx.distPick) html+=`<span class="tag tg2">📏 ${act.ctx.distPick}cm${act.ctx.distEstimated?'*':''}</span>`;
+    if(act.ctx.lowLevel) html+=`<span class="tag tt2">⬇️ Nivel bajo</span>`;
+    if(act.ctx.precision!=='P1') html+=`<span class="tag tt2">🎯 ${act.ctx.precision}</span>`;
+    html+=`</div><ul class="elist">`;
+    for(const el of act.elements){
+      html+=`<li>
+        <span class="ec">${el.code}</span>
+        <span class="ed">${el.desc}</span>
+        <span class="er">${el.reason||''}</span>
+        <span class="et2">${el.tmu.toFixed(1)} TMU</span>
+        ${el.va?'<span style="color:#2e7d32;font-size:10px;margin-left:4px" title="Agrega valor">✓VA</span>':''}
+      </li>`;
+    }
+    html+=`</ul><div class="atot">Subtotal: ${r1(totalTMU).toFixed(1)} TMU = ${(r1(totalTMU)*0.036).toFixed(2)}s</div></div>`;
+  }
+  return html;
+}
+
+function renderMTM1Table(elements){
+  if(!elements.length) return '';
+  const total=elements.reduce((s,e)=>s+e.tmu,0);
+  const va=elements.filter(e=>e.va).reduce((s,e)=>s+e.tmu,0);
+  let html=`<table><thead><tr><th>#</th><th>Código</th><th>Tipo</th><th>Descripción</th><th>TMU</th><th>Seg.</th><th>VA</th><th>Actividad</th></tr></thead><tbody>`;
+  for(const el of elements){
+    const tc=TYPE_CLASS[el.type]||'bt';
+    const tl=TYPE_LABEL[el.type]||el.type;
+    html+=`<tr>
+      <td style="color:#aaa;font-size:10px">${el.seq}</td>
+      <td><span class="bd ${tc}">${el.code}</span></td>
+      <td><span style="font-size:10px;color:${tc==='bt'?'#1565c0':tc==='bg'?'#2e7d32':tc==='br'?'#c62828':tc==='bp'?'#6a1b9a':tc==='bv'?'#e65100':'#00695c'}">${tl}</span></td>
+      <td>${el.desc}</td>
+      <td class="tv">${el.tmu.toFixed(1)}</td>
+      <td style="color:#666">${(el.tmu*0.036).toFixed(3)}</td>
+      <td style="text-align:center">${el.va?'<span style="color:#2e7d32;font-weight:700">✓</span>':'<span style="color:#ddd">–</span>'}</td>
+      <td style="font-size:10px;color:#aaa;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${el.activity||''}">${(el.activity||'').substring(0,25)}...</td>
+    </tr>`;
+  }
+  html+=`<tr class="tot"><td colspan="4">TOTAL</td><td class="tv">${r1(total).toFixed(1)}</td><td>${(total*0.036).toFixed(3)}</td><td style="text-align:center;font-size:10px">${r1(va/total*100).toFixed(0)}% VA</td><td></td></tr>`;
+  html+=`</tbody></table>`;
+  return html;
+}
+
+function renderUASTable(elements){
+  if(!elements.length) return '';
+  const total=elements.reduce((s,e)=>s+e.tmu,0);
+  let html=`<table><thead><tr><th>Código UAS</th><th>Banda</th><th>Dist.</th><th>Descripción</th><th>TMU</th><th>Seg.</th><th>Actividad</th></tr></thead><tbody>`;
+  for(const el of elements){
+    html+=`<tr>
+      <td><span class="uas-b">${el.code}</span></td>
+      <td style="text-align:center;color:#666">${el.faixa?`B${el.faixa}`:'-'}</td>
+      <td style="color:#666">${el.faixa?`${el.dist}cm`:el.code==='KA'?`${el.dist}m`:'-'}</td>
+      <td style="font-size:12px">${el.desc}</td>
+      <td class="tv">${el.tmu.toFixed(1)}</td>
+      <td style="color:#666">${(el.tmu*0.036).toFixed(3)}</td>
+      <td style="font-size:10px;color:#aaa;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${el.activity||''}">${(el.activity||'').substring(0,25)}...</td>
+    </tr>`;
+  }
+  html+=`<tr class="tot"><td colspan="4">TOTAL</td><td class="tv">${r1(total).toFixed(1)}</td><td>${(total*0.036).toFixed(3)}</td><td></td></tr>`;
+  html+=`</tbody></table>`;
+  return html;
+}
+
+function renderKPIs(kpis1,kpisU,pfdType){
+  const pfdPct=Math.round(kpis1.pfd);
+  const diffTMU=r1(kpisU.total-kpis1.total);
+  const diffUPH=r1(kpisU.uph-kpis1.uph);
+  return`<div class="kgrid">
+    <div class="kcard hi"><div class="lbl">TMU Total (MTM-1)</div><div class="val">${kpis1.total.toFixed(1)}</div><div class="sub">1 TMU = 0.036 seg</div></div>
+    <div class="kcard"><div class="lbl">TCA (MTM-1)</div><div class="val">${kpis1.tcaSec.toFixed(2)}s</div><div class="sub">Tiempo ciclo base</div></div>
+    <div class="kcard"><div class="lbl">TCA Normal +${pfdPct}% PFD</div><div class="val">${kpis1.tcaNormal.toFixed(2)}s</div><div class="sub">${pfdType.toUpperCase()}</div></div>
+    <div class="kcard hi"><div class="lbl">UPH (MTM-1)</div><div class="val">${kpis1.uph.toFixed(0)}</div><div class="sub">Unidades/hora</div></div>
+    <div class="kcard"><div class="lbl">VA%</div><div class="val">${kpis1.vaPct.toFixed(1)}%</div><div class="sub">${kpis1.va.toFixed(1)} TMU VA</div></div>
+  </div>
+  <div class="sec-h">Comparativo MTM-1 vs MTM-UAS Básico</div>
+  <table>
+    <thead><tr><th>Métrica</th><th>MTM-1</th><th>MTM-UAS</th><th>Δ (UAS−MTM1)</th></tr></thead>
+    <tbody>
+      <tr><td>TMU Total</td><td><b>${kpis1.total.toFixed(1)}</b></td><td><b>${kpisU.total.toFixed(1)}</b></td><td style="color:${diffTMU>0?'#c62828':'#2e7d32'};font-weight:700">${diffTMU>0?'+':''}${diffTMU.toFixed(1)}</td></tr>
+      <tr><td>TCA Base (s)</td><td>${kpis1.tcaSec.toFixed(3)}</td><td>${kpisU.tcaSec.toFixed(3)}</td><td style="color:${kpisU.tcaSec>kpis1.tcaSec?'#c62828':'#2e7d32'}">${r2(kpisU.tcaSec-kpis1.tcaSec)>0?'+':''}${r2(kpisU.tcaSec-kpis1.tcaSec).toFixed(3)}</td></tr>
+      <tr><td>TCA Normal (s)</td><td>${kpis1.tcaNormal.toFixed(3)}</td><td>${kpisU.tcaNormal.toFixed(3)}</td><td style="color:${kpisU.tcaNormal>kpis1.tcaNormal?'#c62828':'#2e7d32'}">${r2(kpisU.tcaNormal-kpis1.tcaNormal)>0?'+':''}${r2(kpisU.tcaNormal-kpis1.tcaNormal).toFixed(3)}</td></tr>
+      <tr><td>UPH</td><td><b>${kpis1.uph.toFixed(0)}</b></td><td><b>${kpisU.uph.toFixed(0)}</b></td><td style="color:${diffUPH>0?'#2e7d32':'#c62828'};font-weight:700">${diffUPH>0?'+':''}${diffUPH.toFixed(0)}</td></tr>
+      <tr><td>Elementos</td><td>—</td><td>—</td><td style="color:#aaa;font-size:11px">MTM-1 más granular</td></tr>
+    </tbody>
+  </table>
+  <div style="background:#fff8e1;padding:10px 14px;border-radius:5px;border-left:4px solid #ff9800;font-size:12px">
+    <b>ℹ️ Interpretación:</b> La diferencia entre MTM-1 y UAS es esperada. MTM-UAS agrega micro-movimientos en bloques funcionales, resultando en tiempo ${diffTMU>0?'mayor':'menor'} (${Math.abs(diffTMU).toFixed(1)} TMU ${diffTMU>0?'de más':'de menos'}). Esto es normal — UAS es un sistema de estimación rápida, MTM-1 es análisis detallado.
+  </div>`;
+}
+
+function renderGaps(gaps){
+  let html=`<div class="sec-h">Análisis de Gaps e Inconsistencias</div>`;
+  for(const g of gaps){
+    html+=`<div class="gap-item g-${g.level}">
+      <div class="gi">${g.icon}</div>
+      <div class="gc"><div class="gt">${g.title}</div><div class="gd">${g.desc}</div>${g.suggestion?`<div class="gs">💡 ${g.suggestion}</div>`:''}</div>
+    </div>`;
+  }
+  return html;
+}
+
+function renderGargalos(elements){
+  if(!elements.length) return '';
+  const total=elements.reduce((s,e)=>s+e.tmu,0);
+  const byType={};
+  for(const el of elements) byType[el.type]=(byType[el.type]||0)+el.tmu;
+  const sortedTypes=Object.entries(byType).sort((a,b)=>b[1]-a[1]);
+  const sorted=[...elements].sort((a,b)=>b.tmu-a.tmu).slice(0,8);
+  let html=`<div class="sec-h">Por Categoría</div>`;
+  for(const[type,tmu] of sortedTypes){
+    const pct=r1(tmu/total*100);
+    const isMax=type===sortedTypes[0][0];
+    html+=`<div class="gbar"><div class="bh"><span>${TYPE_LABEL[type]||type}</span><span>${tmu.toFixed(1)} TMU (${pct.toFixed(1)}%)</span></div><div class="bg2"><div class="bf${isMax?' r':''}" style="width:${pct}%"></div></div></div>`;
+  }
+  html+=`<div class="sec-h" style="margin-top:16px">Top Elementos por Tiempo</div>`;
+  html+=`<table><thead><tr><th>Código</th><th>Descripción</th><th>TMU</th><th>% del Total</th><th>Tipo</th></tr></thead><tbody>`;
+  for(const el of sorted){
+    const pct=r1(el.tmu/total*100);
+    const tc=TYPE_CLASS[el.type]||'bt';
+    html+=`<tr>
+      <td><span class="bd ${tc}">${el.code}</span></td>
+      <td style="font-size:11px">${el.desc}</td>
+      <td class="tv">${el.tmu.toFixed(1)}</td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div style="flex:1;background:#eee;height:10px;border-radius:3px;overflow:hidden"><div style="height:100%;background:${pct>15?'#f44336':'#FFE600'};width:${Math.min(100,pct*3)}%;border-radius:3px"></div></div><span style="font-size:11px;min-width:35px">${pct.toFixed(1)}%</span></div></td>
+      <td><span style="font-size:10px">${TYPE_LABEL[el.type]||el.type}</span></td>
+    </tr>`;
+  }
+  html+=`</tbody></table>`;
+  const bodyPct=(byType['corpo']||0)/total*100;
+  const walkEls=elements.filter(e=>e.code.startsWith('W-P')||e.code==='KA');
+  if(bodyPct>30) html+=`<div style="background:#fff8e1;padding:10px 14px;border-radius:5px;border-left:4px solid #ff9800;font-size:12px;margin-top:12px"><b>🎯 Oportunidad:</b> Movimientos de cuerpo representan ${bodyPct.toFixed(0)}% del ciclo. Reduzca distancias de caminata o reposicione puestos de trabajo.</div>`;
+  if(walkEls.length>0&&walkEls.reduce((s,e)=>s+e.tmu,0)/total>0.25) html+=`<div style="background:#e3f2fd;padding:10px 14px;border-radius:5px;border-left:4px solid #2196f3;font-size:12px;margin-top:8px"><b>🚶 Caminata:</b> El desplazamiento es el mayor cuello de botella. Evalúe kaizen de layout para aproximar puestos.</div>`;
+  return html;
+}
+
+function setPFD(type,el){
+  currentPFD=type;
+  document.querySelectorAll('.pbt').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  if(currentAnalysis) renderAll(currentAnalysis);
+}
+function showTab(id,el){
+  document.querySelectorAll('.tcont').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+}
+function showStatus(msg,type='ok'){
+  const s=document.getElementById('stbar');
+  s.textContent=msg;s.className='stbar '+type;s.style.display='block';
+}
+function renderAll(analysis){
+  document.getElementById('log').innerHTML=renderLog(analysis.activities);
+  document.getElementById('mtm1').innerHTML=`<div class="sec-h">Análisis MTM-1 Completo</div>`+renderMTM1Table(analysis.mtm1);
+  document.getElementById('uas').innerHTML=`<div class="sec-h">Análisis MTM-UAS Básico</div>`+renderUASTable(analysis.uas);
+  document.getElementById('kpi').innerHTML=renderKPIs(calcKPIs(analysis.mtm1,analysis.pfdType),calcKPIs(analysis.uas,analysis.pfdType),analysis.pfdType);
+  document.getElementById('gap').innerHTML=renderGaps(analysis.gaps);
+  document.getElementById('garb').innerHTML=renderGargalos(analysis.mtm1);
+}
+function runAnalysis(){
+  const text=document.getElementById('procInput').value.trim();
+  if(!text){alert('Pegue la descripción del proceso antes de analizar.');return;}
+  showStatus('🔄 Analizando proceso...','run');
+  setTimeout(()=>{
+    try{
+      currentAnalysis=analyzeProcess(text,currentPFD);
+      currentAnalysis.pfdType=currentPFD;
+      renderAll(currentAnalysis);
+      const n=currentAnalysis.mtm1.length;
+      const uph=calcKPIs(currentAnalysis.mtm1,currentPFD).uph;
+      showStatus(`✅ Análisis completo: ${currentAnalysis.activities.length} actividades, ${n} elementos MTM-1, UPH ${uph.toFixed(0)}`,'ok');
+      document.getElementById('expNote').textContent=`${n} elementos · ${new Date().toLocaleTimeString('es')}`;
+    }catch(e){
+      showStatus('❌ Error en el análisis: '+e.message,'err');
+      console.error(e);
+    }
+  },50);
+}
+
+function exportCSV(){
+  if(!currentAnalysis){alert('Ejecute el análisis primero.');return;}
+  const kpis=calcKPIs(currentAnalysis.mtm1,currentPFD);
+  let csv='SEQ,CÓDIGO,TIPO,DESCRIPCIÓN,TMU,SEGUNDOS,VA,ACTIVIDAD\n';
+  for(const el of currentAnalysis.mtm1){
+    csv+=`${el.seq},"${el.code}","${TYPE_LABEL[el.type]||el.type}","${el.desc}",${el.tmu.toFixed(1)},${(el.tmu*0.036).toFixed(3)},${el.va?'SI':'NO'},"${(el.activity||'').replace(/"/g,"'")}"\n`;
+  }
+  csv+=`\nRESUMEN\nTMU Total,${kpis.total.toFixed(1)}\nTCA Base (s),${kpis.tcaSec.toFixed(3)}\nTCA Normal (s),${kpis.tcaNormal.toFixed(3)}\nUPH,${kpis.uph.toFixed(0)}\nVA%,${kpis.vaPct.toFixed(1)}%\n`;
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='analisis_mtm.csv';a.click();
+}
+function copyAnalysis(){
+  if(!currentAnalysis){alert('Ejecute el análisis primero.');return;}
+  const kpis=calcKPIs(currentAnalysis.mtm1,currentPFD);
+  const kpisU=calcKPIs(currentAnalysis.uas,currentPFD);
+  let txt=`ANÁLISIS MTM — ${new Date().toLocaleDateString('es')}\n${'═'.repeat(50)}\n\n`;
+  txt+=`PROCESO:\n${document.getElementById('procInput').value}\n\n`;
+  txt+=`MTM-1 RESULTADO:\n`;
+  for(const el of currentAnalysis.mtm1) txt+=`  ${el.seq.toString().padStart(2)}. ${el.code.padEnd(12)} ${el.desc.padEnd(30)} ${el.tmu.toFixed(1).padStart(6)} TMU\n`;
+  txt+=`\n  TOTAL: ${kpis.total.toFixed(1)} TMU | TCA: ${kpis.tcaSec.toFixed(2)}s | TCA Normal: ${kpis.tcaNormal.toFixed(2)}s | UPH: ${kpis.uph.toFixed(0)}\n`;
+  txt+=`  VA%: ${kpis.vaPct.toFixed(1)}% | PFD: +${Math.round(kpis.pfd)}%\n\n`;
+  txt+=`MTM-UAS RESULTADO:\n`;
+  for(const el of currentAnalysis.uas) txt+=`  ${el.code.padEnd(6)} ${el.desc.padEnd(35)} ${el.tmu.toFixed(1).padStart(6)} TMU\n`;
+  txt+=`\n  TOTAL: ${kpisU.total.toFixed(1)} TMU | UPH: ${kpisU.uph.toFixed(0)}\n\n`;
+  txt+=`GAPS:\n`;
+  for(const g of currentAnalysis.gaps) txt+=`  [${g.level.toUpperCase()}] ${g.icon} ${g.title}: ${g.desc}\n`;
+  navigator.clipboard.writeText(txt).then(()=>{showStatus('📋 Análisis copiado al portapapeles!','ok');}).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    showStatus('📋 Análisis copiado!','ok');
+  });
+}
+function printReport(){window.print();}
+
+const EXAMPLES=[
+`1. Caminar hasta la posición del producto (4 metros)
+2. Localizar producto en el estante (altura media)
+3. Tomar producto aislado del estante (distancia 35cm)
+4. Escanear código de barras del producto
+5. Colocar producto en la bolsa de picking (distancia 25cm)
+6. Verificar cantidad en la bolsa
+7. Caminar hasta la estación de empaque (4 metros)`,
+
+`1. Tomar caja vacía de la pila (30cm)
+2. Armar la caja (doblar las alas)
+3. Caminar hasta estación de picking (3 metros)
+4. Tomar producto del estante bajo (25cm)
+5. Escanear el producto con pistola RF
+6. Colocar producto en la caja (20cm)
+7. Verificar ítems del pedido en el sistema
+8. Cerrar la caja
+9. Pegar etiqueta de envío (20cm)
+10. Pesar en la báscula
+11. Caminar hasta banda de salida (2 metros)
+12. Depositar caja en la banda`,
+
+`1. Recibir paquete del cliente
+2. Verificar producto visualmente
+3. Escanear código de barras de la devolución
+4. Tomar producto del embalaje (abrir caja)
+5. Inspeccionar estado del producto
+6. Colocar producto en el área de triaje (40cm)
+7. Pegar etiqueta de devolución en el producto
+8. Separar producto por motivo de retorno`,
+
+`1. Tomar caja planificada de la pila (30cm)
+2. Armar y doblar la caja
+3. Colocar caja en la estación de empaque
+4. Insertar factura en la caja
+5. Tomar producto del rack (40cm, estante bajo)
+6. Verificar integridad del producto
+7. Colocar producto en la caja armada
+8. Cerrar y sellar la caja
+9. Etiquetar la caja
+10. Pesar el embalaje en la báscula`
+];
+
+function loadEx(i){
+  document.getElementById('procInput').value=EXAMPLES[i];
+  showStatus('📝 Ejemplo cargado. Haga clic en Analizar.','run');
+}
+
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter') runAnalysis();});
+
+function toggleGloss(){
+  const btn=document.getElementById('glossBtn');
+  const body=document.getElementById('glossBody');
+  btn.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+</script>
+</body></html>
